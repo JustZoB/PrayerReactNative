@@ -1,4 +1,9 @@
-import { UserAction, UserModel } from "../actions/userActions";
+import {
+  ON_LOGIN,
+  ON_ERROR,
+} from "./userTypes";
+
+import { UserAction, UserModel } from "../../actions/userActions";
 
 type UserState = {
   user: UserModel
@@ -12,12 +17,12 @@ const initialState = {
 
 const UserReducer = (state: UserState = initialState, action: UserAction) => {
   switch (action.type) {
-    case 'ON_LOGIN':
+    case ON_LOGIN:
       return {
         ...state,
         user: action.payload,
       };
-    case 'ON_ERROR':
+    case ON_ERROR:
       return {
         ...state,
         error: action.payload

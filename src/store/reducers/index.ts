@@ -1,8 +1,5 @@
-// export default function reducer(state = {}, action) {
-//   return state;
-// }
 import { combineReducers } from "redux";
-import { UserReducer } from "./userReducer";
+import { UserReducer } from "./user/userReducer";
 
 const rootReducer = combineReducers({
   userReducer: UserReducer,
