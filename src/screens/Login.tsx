@@ -6,27 +6,34 @@ import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity } from 'react-na
 import { AuthStackParams } from '../navigators/AuthStackNavigator';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { ApplicationState, onLogin } from '../store';
+import { onLogin } from '../store';
+import { ApplicationState } from '../store/rootReducer';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
+import { userLogin } from '../features/userLogin/userLoginSlice';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  const store = useSelector(store => store)
+
+  // console.log(store.userLoginSlice)
+
+  // const { user, error } = useSelector(store => store)
+
+
   const dispatch = useDispatch()
 
-  const { user, error } = useSelector((state: ApplicationState) => state.userReducer);
+  // const { user } = useSelector((state: ApplicationState) => state.userLoginSlice);
 
-  const { token } = user;
-
-  useEffect(() => {
-    if (token !== undefined) {
-      // navigate to Desk
-      // useNavigation('Desk')
-    }
-  }, [user])
+  // useEffect(() => {
+  //   if (user !== undefined) {
+  //     // navigate to Desk
+  //     // useNavigation('Desk')
+  //   }
+  // }, [user])
 
   const validate = (values: { userName?: string }) => {
     let errors = {};

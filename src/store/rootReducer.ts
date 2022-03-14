@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import { UserReducer } from "./user/userReducer";
+import userLoginSlice from "../features/userLogin/userLoginSlice";
 
 const rootReducer = combineReducers({
-  userReducer: UserReducer,
+  userLoginSlice,
 })
 
 export type ApplicationState = ReturnType<typeof rootReducer>
