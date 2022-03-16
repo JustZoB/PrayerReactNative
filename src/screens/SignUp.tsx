@@ -7,12 +7,15 @@ import { AuthStackParams } from '../navigators/AuthStackNavigator';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
 import { Field, Form } from 'react-final-form';
+import { useDispatch } from 'react-redux';
+import { registerStart } from '../store';
 
 export const SignUp: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
   const [email, setEmail] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const dispatch = useDispatch()
 
   const validate = (values: { userName?: string }) => {
     let errors = {};
@@ -25,20 +28,8 @@ export const SignUp: React.FC = () => {
   }
 
   const onSignUp = () => {
-    axios.post(`/auth/sign-up`, {
-      email: email,
-      name: name,
-      password: password
-    })
-      .then(function (response) {
-        console.log(response.data);
-        setEmail('')
-        setName('')
-        setPassword('')
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    console.log(email, name, password)
+    dispatch(registerStart(email, name, password))
   }
 
   return (

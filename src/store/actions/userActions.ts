@@ -1,46 +1,36 @@
-import axios from "axios";
-import { Dispatch } from "react";
+import types from '../../store/types';
 import { User } from "../../../api/axios";
 
-export interface LoginAction {
-  readonly type: 'ON_LOGIN';
-  payload: User
-}
+export const logInStart = (email: string, password: string) => ({
+  type: types.LOG_IN_START,
+  payload: { email, password }
+})
 
-export interface ErrorAction {
-  readonly type: 'ON_ERROR';
-  payload: any
-}
+export const logInSuccess = (user: User) => ({
+  type: types.LOG_IN_SUCCESS,
+  payload: user
+})
 
-export type UserAction = LoginAction | ErrorAction;
+export const logInFailure = (error: any) => ({
+  type: types.LOG_IN_FAILURE,
+  payload: error
+})
 
-export const onLogin = async (email: string, password: string) => {
-  return async (dispatch: Dispatch<UserAction>) => {
-    try {
-      const response = await axios.post<User>(`/auth/sign-in`, {
-        email,
-        password
-      })
+export const registerStart = (email: string, name: string, password: string) => ({
+  type: types.REGISTER_START,
+  payload: { email, name, password },
+});
 
-      console.log(response.data)
+export const registerSuccess = (user: User) => ({
+  type: types.REGISTER_SUCCESS,
+  payload: user,
+});
 
-      if (!response) {
-        dispatch({
-          type: 'ON_ERROR',
-          payload: 'Login issue with API'
-        })
-      } else {
-        dispatch({
-          type: 'ON_LOGIN',
-          payload: response.data
-        })
-      }
+export const registerFailure = (error: any) => ({
+  type: types.REGISTER_FAILURE,
+  payload: error,
+});
 
-    } catch (error) {
-      dispatch({
-        type: 'ON_ERROR',
-        payload: error
-      })
-    }
-  }
-}
+export const logOut = () => ({
+  type: types.LOG_OUT,
+});

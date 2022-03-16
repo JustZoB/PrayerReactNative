@@ -6,27 +6,15 @@ import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity } from 'react-na
 import { AuthStackParams } from '../navigators/AuthStackNavigator';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { onLogin } from '../store';
-import { ApplicationState } from '../store/rootReducer';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
-import { userLogin } from '../features/userLogin/userLoginSlice';
+import { logInStart } from '../store/actions/userActions';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
-  const store = useSelector(store => store)
-
-  // console.log(store.userLoginSlice)
-
-  // const { user, error } = useSelector(store => store)
-
-
   const dispatch = useDispatch()
-
-  // const { user } = useSelector((state: ApplicationState) => state.userLoginSlice);
 
   // useEffect(() => {
   //   if (user !== undefined) {
@@ -47,7 +35,7 @@ export const Login: React.FC = () => {
 
   const onSignIn = () => {
     console.log(email, password)
-    dispatch(onLogin(email, password))
+    dispatch(logInStart(email, password))
   }
 
   return (

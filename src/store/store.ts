@@ -1,9 +1,10 @@
-import { createStore, applyMiddleware, compose } from "redux";
+import { createStore, applyMiddleware, compose, Action } from "redux";
 import createSagaMiddleware from 'redux-saga';
 import logger from "redux-logger";
 
 import rootSaga from './sagas';
 import { rootReducer } from "./rootReducer";
+import { ThunkAction } from "@reduxjs/toolkit";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -15,3 +16,12 @@ const store = createStore(rootReducer, enhancer);
 sagaMiddleware.run(rootSaga);
 
 export default store;
+
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
