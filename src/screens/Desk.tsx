@@ -1,11 +1,15 @@
 import React from 'react'
 import { StyleSheet, Text, SafeAreaView } from 'react-native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 export const Desk: React.FC = () => {
+  const auth = useSelector((state: RootState) => state.userLoginSlice);
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.headerText}>
-        Desk
+        Desk {auth.user.name}
       </Text>
     </SafeAreaView>
   );

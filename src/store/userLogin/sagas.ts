@@ -2,7 +2,8 @@ import { all, call, put, takeEvery } from 'redux-saga/effects';
 import types from './types';
 
 import axios, { User } from '../../../api/axios';
-import { logInFailure, logInSuccess, registerFailure, registerSuccess } from './action';
+import { logInFailure, registerFailure, registerSuccess } from './action';
+import { logInSuccess } from './reducers';
 
 const logIn = async (email: string, password: string) => {
   const response = await axios.post<User>(`/auth/sign-in`, {

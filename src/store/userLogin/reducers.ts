@@ -16,6 +16,11 @@ const userSlice = createSlice({
   name: 'userSlice',
   initialState,
   reducers: {
+    logInSuccess: (state, action) => {
+      console.log('state', state)
+      console.log('action.payload', action.payload)
+      return action.payload
+    },
     userLogin: (state, action) => {
       switch (action.type) {
         case types.LOG_IN_SUCCESS:
@@ -39,6 +44,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { userLogin } = userSlice.actions;
+export const { userLogin, logInSuccess } = userSlice.actions;
 
 export default userSlice.reducer;
