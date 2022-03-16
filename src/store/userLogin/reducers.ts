@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { User } from "../../../api/axios";
-import types from '../../store/types';
+import { User } from '../../../api/axios';
+import types from './types';
 
 type UserState = {
   user: User | undefined

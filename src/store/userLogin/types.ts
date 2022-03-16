@@ -1,4 +1,4 @@
-enum userActionTypes {
+enum ActionTypes {
   LOG_IN_START = 'LOG_IN_START',
   LOG_IN_SUCCESS = 'LOG_IN_SUCCESS',
   LOG_IN_FAILURE = 'LOG_IN_FAILURE',
@@ -8,4 +8,4 @@ enum userActionTypes {
   LOG_OUT = 'LOG_OUT',
 };
 
-export default userActionTypes;
+export default ActionTypes;

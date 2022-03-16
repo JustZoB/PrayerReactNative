@@ -1,15 +1,15 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios, { User } from '../../../api/axios';
-import types from '../../store/types';
+import { all, call, put, takeEvery } from 'redux-saga/effects';
+import types from './types';
 
-import { logInFailure, logInSuccess, registerFailure, registerSuccess } from '../actions/userActions';
+import axios, { User } from '../../../api/axios';
+import { logInFailure, logInSuccess, registerFailure, registerSuccess } from './action';
 
 const logIn = async (email: string, password: string) => {
   const response = await axios.post<User>(`/auth/sign-in`, {
     email,
     password,
   })
-  return { token: response.data.token }
+  return { user: response.data }
 }
 
 const register = async (email: string, name: string, password: string) => {
@@ -18,7 +18,7 @@ const register = async (email: string, name: string, password: string) => {
     name,
     password,
   })
-  return { token: response.data.token }
+  return { user: response.data }
 }
 
 export function* logInSaga({ payload: { email, password } }) {
@@ -46,15 +46,15 @@ export function* logInAfterRegister({ payload: { email, password } }) {
 }
 
 export function* onLogInStart() {
-  yield takeLatest(types.LOG_IN_START, logInSaga);
+  yield takeEvery(types.LOG_IN_START, logInSaga);
 }
 
 export function* onRegisterStart() {
-  yield takeLatest(types.REGISTER_START, registerSaga);
+  yield takeEvery(types.REGISTER_START, registerSaga);
 }
 
 export function* onRegisterSuccess() {
-  yield takeLatest(types.REGISTER_SUCCESS, logInAfterRegister);
+  yield takeEvery(types.REGISTER_SUCCESS, logInAfterRegister);
 }
 
 export function* authSagas() {

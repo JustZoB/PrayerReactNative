@@ -2,13 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
-import axios from '../../api/axios';
 import { AuthStackParams } from '../navigators/AuthStackNavigator';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
 import { Field, Form } from 'react-final-form';
 import { useDispatch } from 'react-redux';
-import { registerStart } from '../store';
+import { registerStart } from '../store/userLogin/action';
 
 export const SignUp: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
@@ -28,8 +27,7 @@ export const SignUp: React.FC = () => {
   }
 
   const onSignUp = () => {
-    console.log(email, name, password)
-    dispatch(registerStart(email, name, password))
+    dispatch(registerStart({ email, name, password }))
   }
 
   return (

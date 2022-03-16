@@ -8,7 +8,7 @@ import { AuthStackParams } from '../navigators/AuthStackNavigator';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
-import { logInStart } from '../store/actions/userActions';
+import { logInStart } from '../store/userLogin/action';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
@@ -34,8 +34,7 @@ export const Login: React.FC = () => {
   }
 
   const onSignIn = () => {
-    console.log(email, password)
-    dispatch(logInStart(email, password))
+    dispatch(logInStart({ email, password }))
   }
 
   return (

@@ -2,11 +2,22 @@ import axios from 'axios';
 
 const instance = axios.create({ baseURL: 'https://prayer.herokuapp.com/' });
 
+export interface SignIn {
+  email: string,
+  password: string,
+}
+
+export interface SignUp {
+  email: string,
+  name: string,
+  password: string,
+}
+
 export interface User {
-  id: number;
-  email: string;
-  name: string;
-  token: string
+  id: number,
+  email: string,
+  name: string,
+  token: string,
 }
 
 export interface Columns {
