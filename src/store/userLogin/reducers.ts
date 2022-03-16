@@ -17,8 +17,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logInSuccess: (state, action) => {
-      console.log('state', state)
-      console.log('action.payload', action.payload)
+      return action.payload
+    },
+    registerSuccess: (state, action) => {
+      return action.payload
+    },
+    logOut: (state, action) => {
       return action.payload
     },
     userLogin: (state, action) => {
@@ -44,6 +48,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { userLogin, logInSuccess } = userSlice.actions;
+export const { userLogin, logInSuccess, registerSuccess, logOut } = userSlice.actions;
 
 export default userSlice.reducer;
