@@ -55,10 +55,6 @@ export function* registerSaga({ payload: { email, name, password } }) {
   }
 }
 
-export function* logInAfterRegister({ payload: { email, password } }) {
-  yield logInSaga({ payload: { email, password } });
-}
-
 export function* onLogInStart() {
   yield takeEvery(types.LOG_IN_START, logInSaga);
 }
@@ -67,14 +63,9 @@ export function* onRegisterStart() {
   yield takeEvery(types.REGISTER_START, registerSaga);
 }
 
-export function* onRegisterSuccess() {
-  yield takeEvery(types.REGISTER_SUCCESS, logInAfterRegister);
-}
-
 export function* authSagas() {
   yield all([
     call(onLogInStart),
     call(onRegisterStart),
-    call(onRegisterSuccess),
   ]);
 }
