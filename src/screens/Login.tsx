@@ -9,12 +9,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
 import { logInStart } from '../store/userLogin/action';
+import { RootState } from '../store/store';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const dispatch = useDispatch()
+  const auth = useSelector((state: RootState) => state.userLoginSlice);
 
   // useEffect(() => {
   //   if (user !== undefined) {
@@ -77,6 +79,9 @@ export const Login: React.FC = () => {
               title='Sign In'
               onPress={onSignIn}
             />
+            {auth.error &&
+              <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+            }
           </>
         )}
       />
@@ -128,6 +133,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: 'red',
-    marginBottom: 10,
-  }
+    marginTop: 10,
+  },
 });

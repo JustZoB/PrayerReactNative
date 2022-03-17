@@ -6,8 +6,9 @@ import { AuthStackParams } from '../navigators/AuthStackNavigator';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
 import { Field, Form } from 'react-final-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { registerStart } from '../store/userLogin/action';
+import { RootState } from '../store/store';
 
 export const SignUp: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
@@ -15,6 +16,7 @@ export const SignUp: React.FC = () => {
   const [name, setName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const dispatch = useDispatch()
+  const auth = useSelector((state: RootState) => state.userLoginSlice);
 
   const validate = (values: { userName?: string }) => {
     let errors = {};
@@ -82,6 +84,9 @@ export const SignUp: React.FC = () => {
               title='Sign Up'
               onPress={onSignUp}
             />
+            {auth.error &&
+              <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+            }
           </>
         )}
       />
@@ -137,6 +142,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: 'red',
-    marginBottom: 10,
-  }
+    marginTop: 10,
+  },
 });

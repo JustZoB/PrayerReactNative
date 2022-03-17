@@ -4,7 +4,7 @@ import types from './types';
 
 type UserState = {
   user: User | undefined
-  error: string | undefined
+  error: Error | undefined
 }
 
 const initialState: UserState = {
@@ -19,7 +19,13 @@ const userSlice = createSlice({
     logInSuccess: (state, action) => {
       return action.payload
     },
+    logInFailure: (state, action) => {
+      return action.payload
+    },
     registerSuccess: (state, action) => {
+      return action.payload
+    },
+    registerFailure: (state, action) => {
       return action.payload
     },
     logOut: (state, action) => {
@@ -48,6 +54,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { userLogin, logInSuccess, registerSuccess, logOut } = userSlice.actions;
+export const { userLogin, logInSuccess, logInFailure, registerSuccess, registerFailure, logOut } = userSlice.actions;
 
 export default userSlice.reducer;
