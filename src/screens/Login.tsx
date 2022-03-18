@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Form, Field } from 'react-final-form'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { AuthStackParams } from '../navigators/AuthStackNavigator';
@@ -14,51 +14,39 @@ import { clearLogInErrors } from '../store/userLogin/reducers';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const dispatch = useDispatch()
   const auth = useSelector((state: RootState) => state.userLoginSlice);
 
-  // useEffect(() => {
-  //   if (user !== undefined) {
-  //     // navigate to Desk
-  //     // useNavigation('Desk')
-  //   }
-  // }, [user])
-
   const navigateToSignUp = () => {
     dispatch(clearLogInErrors({}))
-    setEmail('')
-    setPassword('')
     navigation.navigate('SignUp')
   }
 
   const validate = (values: { email: string, password: string }) => {
     const errors: { email?: string, password?: string } = {}
 
-    console.log(values)
-
-    // if (!values.email) {
-    //   errors.email = 'Required'
-    // }
+    if (!values.email) {
+      errors.email = 'Required'
+    }
     if (values.email && values.email.length > 20) {
       errors.email = 'Too long'
     }
-    // if (!values.password) {
-    //   errors.password = 'Required'
-    // }
+    if (!values.password) {
+      errors.password = 'Required'
+    }
     if (values.password && values.password.length > 20) {
       errors.password = 'Too long'
     }
 
-    console.log(errors)
-
     return errors
   }
 
-  const onSignIn = () => {
+  const onSignIn = (values: { email: string, password: string }) => {
     dispatch(clearLogInErrors({}))
-    dispatch(logInStart({ email, password }))
+    dispatch(logInStart({
+      email: values.email,
+      password: values.password
+    }))
   }
 
   return (
@@ -69,7 +57,7 @@ export const Login: React.FC = () => {
       <Form
         onSubmit={onSignIn}
         validate={validate}
-        render={({ handleSubmit, form, submitting, values }) => (
+        render={({ handleSubmit, submitting }) => (
           <>
             <Field
               name='email'
@@ -77,9 +65,9 @@ export const Login: React.FC = () => {
                 <View style={styles.inputContainer}>
                   <TextField
                     {...input}
-                    value={email}
+                    value={input.value}
                     placeholder='E-mail'
-                    onTextChange={setEmail}
+                    onTextChange={input.onChange}
                   />
                   {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
                 </View>
@@ -92,8 +80,8 @@ export const Login: React.FC = () => {
                   <TextField
                     {...input}
                     placeholder='Password'
-                    value={password}
-                    onTextChange={setPassword}
+                    value={input.value}
+                    onTextChange={input.onChange}
                     isSecure={true}
                   />
                   {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
@@ -106,7 +94,6 @@ export const Login: React.FC = () => {
               disabled={submitting}
               onPress={handleSubmit}
             />
-            <Text>{JSON.stringify(values)}</Text>
             {auth.error &&
               <>
                 {auth.error.name === "EntityNotFound"

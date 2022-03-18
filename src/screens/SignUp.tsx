@@ -13,33 +13,46 @@ import { clearLogInErrors } from '../store/userLogin/reducers';
 
 export const SignUp: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
-  const [email, setEmail] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const dispatch = useDispatch()
   const auth = useSelector((state: RootState) => state.userLoginSlice);
 
   const navigateToSignIn = () => {
     dispatch(clearLogInErrors({}))
-    setEmail('')
-    setName('')
-    setPassword('')
     navigation.navigate('Login')
   }
 
-  const validate = (values: { userName?: string }) => {
-    let errors = {};
+  const validate = (values: { email: string, name: string, password: string }) => {
+    const errors: { email?: string, name?: string, password?: string } = {}
 
-    if (values.userName && values.userName.length > 20) {
-      errors = { ...errors, userName: 'Too long' }
+    if (!values.email) {
+      errors.email = 'Required'
+    }
+    if (values.email && values.email.length > 20) {
+      errors.email = 'Too long'
+    }
+    if (!values.name) {
+      errors.name = 'Required'
+    }
+    if (values.name && values.name.length > 20) {
+      errors.name = 'Too long'
+    }
+    if (!values.password) {
+      errors.password = 'Required'
+    }
+    if (values.password && values.password.length > 20) {
+      errors.password = 'Too long'
     }
 
     return errors
   }
 
-  const onSignUp = () => {
+  const onSignUp = (values: { email: string, name: string, password: string }) => {
     dispatch(clearLogInErrors({}))
-    dispatch(registerStart({ email, name, password }))
+    dispatch(registerStart({
+      email: values.email,
+      name: values.name,
+      password: values.password
+    }))
   }
 
   return (
@@ -50,7 +63,7 @@ export const SignUp: React.FC = () => {
       <Form
         onSubmit={onSignUp}
         validate={validate}
-        render={({ handleSubmit, values }) => (
+        render={({ handleSubmit }) => (
           <>
             <Field
               name='email'
@@ -58,10 +71,10 @@ export const SignUp: React.FC = () => {
                 <View style={styles.inputContainer}>
                   <TextField
                     placeholder='E-mail'
-                    value={email}
-                    onTextChange={setEmail}
+                    value={input.value}
+                    onTextChange={input.onChange}
                   />
-                  {meta.touched && meta.error && <Text>{meta.error}</Text>}
+                  {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
                 </View>
               )}
             />
@@ -71,10 +84,10 @@ export const SignUp: React.FC = () => {
                 <View style={styles.inputContainer}>
                   <TextField
                     placeholder='Name'
-                    value={name}
-                    onTextChange={setName}
+                    value={input.value}
+                    onTextChange={input.onChange}
                   />
-                  {meta.touched && meta.error && <Text>{meta.error}</Text>}
+                  {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
                 </View>
               )}
             />
@@ -84,20 +97,19 @@ export const SignUp: React.FC = () => {
                 <View style={styles.inputContainer}>
                   <TextField
                     placeholder='Password'
-                    value={password}
-                    onTextChange={setPassword}
+                    value={input.value}
+                    onTextChange={input.onChange}
                     isSecure={true}
                   />
-                  {meta.touched && meta.error && <Text>{meta.error}</Text>}
+                  {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
                 </View>
               )}
             />
 
             <Button
               title='Sign Up'
-              onPress={onSignUp}
+              onPress={handleSubmit}
             />
-            <Text>{JSON.stringify(values)}</Text>
             {auth.error &&
               <>
                 {auth.error.name === "QueryFailedError"
@@ -162,5 +174,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'red',
     marginTop: 10,
+  },
+  textFieldError: {
+    position: 'absolute',
+    top: 13,
+    right: 10,
+    fontSize: 16,
+    color: 'red',
   },
 });
