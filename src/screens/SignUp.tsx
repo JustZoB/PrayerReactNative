@@ -9,6 +9,7 @@ import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerStart } from '../store/userLogin/action';
 import { RootState } from '../store/store';
+import { clearLogInErrors } from '../store/userLogin/reducers';
 
 export const SignUp: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
@@ -17,6 +18,14 @@ export const SignUp: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const dispatch = useDispatch()
   const auth = useSelector((state: RootState) => state.userLoginSlice);
+
+  const navigateToSignIn = () => {
+    dispatch(clearLogInErrors({}))
+    setEmail('')
+    setName('')
+    setPassword('')
+    navigation.navigate('Login')
+  }
 
   const validate = (values: { userName?: string }) => {
     let errors = {};
@@ -29,6 +38,7 @@ export const SignUp: React.FC = () => {
   }
 
   const onSignUp = () => {
+    dispatch(clearLogInErrors({}))
     dispatch(registerStart({ email, name, password }))
   }
 
@@ -40,7 +50,7 @@ export const SignUp: React.FC = () => {
       <Form
         onSubmit={onSignUp}
         validate={validate}
-        render={({ handleSubmit }) => (
+        render={({ handleSubmit, values }) => (
           <>
             <Field
               name='email'
@@ -48,6 +58,7 @@ export const SignUp: React.FC = () => {
                 <View style={styles.inputContainer}>
                   <TextField
                     placeholder='E-mail'
+                    value={email}
                     onTextChange={setEmail}
                   />
                   {meta.touched && meta.error && <Text>{meta.error}</Text>}
@@ -60,6 +71,7 @@ export const SignUp: React.FC = () => {
                 <View style={styles.inputContainer}>
                   <TextField
                     placeholder='Name'
+                    value={name}
                     onTextChange={setName}
                   />
                   {meta.touched && meta.error && <Text>{meta.error}</Text>}
@@ -72,6 +84,7 @@ export const SignUp: React.FC = () => {
                 <View style={styles.inputContainer}>
                   <TextField
                     placeholder='Password'
+                    value={password}
                     onTextChange={setPassword}
                     isSecure={true}
                   />
@@ -84,8 +97,14 @@ export const SignUp: React.FC = () => {
               title='Sign Up'
               onPress={onSignUp}
             />
+            <Text>{JSON.stringify(values)}</Text>
             {auth.error &&
-              <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+              <>
+                {auth.error.name === "QueryFailedError"
+                  ? <Text style={styles.errorMessage}>Server error: This e-mail is already taken</Text>
+                  : <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+                }
+              </>
             }
           </>
         )}
@@ -95,7 +114,7 @@ export const SignUp: React.FC = () => {
         <Text style={styles.singInText}>
           Already have an account?
           <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
+            onPress={navigateToSignIn}
           >
             <Text style={styles.link}>Sign In</Text>
           </TouchableOpacity>

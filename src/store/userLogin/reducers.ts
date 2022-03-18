@@ -30,9 +30,12 @@ const userSlice = createSlice({
     logOut: (state, action) => {
       return action.payload
     },
+    clearLogInErrors: (state, action) => {
+      return action.payload
+    },
   },
 });
 
-export const { logInSuccess, logInFailure, registerSuccess, registerFailure, logOut } = userSlice.actions;
+export const { logInSuccess, logInFailure, registerSuccess, registerFailure, logOut, clearLogInErrors } = userSlice.actions;
 
 export default userSlice.reducer;

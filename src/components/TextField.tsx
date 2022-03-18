@@ -5,10 +5,11 @@ import CheckBox from '@react-native-community/checkbox';
 interface TextFieldProps {
   placeholder: string;
   isSecure?: boolean;
+  value?: string;
   onTextChange: Function;
 }
 
-export const TextField: React.FC<TextFieldProps> = ({ placeholder, isSecure = false, onTextChange }) => {
+export const TextField: React.FC<TextFieldProps> = ({ placeholder, isSecure = false, onTextChange, value }) => {
   const [isPassword, setIsPassword] = useState<boolean>(false)
 
   useEffect(() => {
@@ -19,6 +20,7 @@ export const TextField: React.FC<TextFieldProps> = ({ placeholder, isSecure = fa
     <>
       <TextInput
         placeholder={placeholder}
+        value={value}
         secureTextEntry={isPassword}
         onChangeText={(text) => onTextChange(text)}
         style={styles.textField}

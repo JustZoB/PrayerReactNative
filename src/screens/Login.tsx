@@ -10,6 +10,7 @@ import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
 import { logInStart } from '../store/userLogin/action';
 import { RootState } from '../store/store';
+import { clearLogInErrors } from '../store/userLogin/reducers';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
@@ -25,17 +26,38 @@ export const Login: React.FC = () => {
   //   }
   // }, [user])
 
-  const validate = (values: { userName?: string }) => {
-    let errors = {};
+  const navigateToSignUp = () => {
+    dispatch(clearLogInErrors({}))
+    setEmail('')
+    setPassword('')
+    navigation.navigate('SignUp')
+  }
 
-    if (values.userName && values.userName.length > 20) {
-      errors = { ...errors, userName: 'Too long' }
+  const validate = (values: { email: string, password: string }) => {
+    const errors: { email?: string, password?: string } = {}
+
+    console.log(values)
+
+    // if (!values.email) {
+    //   errors.email = 'Required'
+    // }
+    if (values.email && values.email.length > 20) {
+      errors.email = 'Too long'
     }
+    // if (!values.password) {
+    //   errors.password = 'Required'
+    // }
+    if (values.password && values.password.length > 20) {
+      errors.password = 'Too long'
+    }
+
+    console.log(errors)
 
     return errors
   }
 
   const onSignIn = () => {
+    dispatch(clearLogInErrors({}))
     dispatch(logInStart({ email, password }))
   }
 
@@ -47,17 +69,19 @@ export const Login: React.FC = () => {
       <Form
         onSubmit={onSignIn}
         validate={validate}
-        render={({ handleSubmit }) => (
+        render={({ handleSubmit, form, submitting, values }) => (
           <>
             <Field
               name='email'
               render={({ input, meta }) => (
                 <View style={styles.inputContainer}>
                   <TextField
+                    {...input}
+                    value={email}
                     placeholder='E-mail'
                     onTextChange={setEmail}
                   />
-                  {meta.touched && meta.error && <Text>{meta.error}</Text>}
+                  {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
                 </View>
               )}
             />
@@ -66,21 +90,30 @@ export const Login: React.FC = () => {
               render={({ input, meta }) => (
                 <View style={styles.inputContainer}>
                   <TextField
+                    {...input}
                     placeholder='Password'
+                    value={password}
                     onTextChange={setPassword}
                     isSecure={true}
                   />
-                  {meta.touched && meta.error && <Text>{meta.error}</Text>}
+                  {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
                 </View>
               )}
             />
 
             <Button
               title='Sign In'
-              onPress={onSignIn}
+              disabled={submitting}
+              onPress={handleSubmit}
             />
+            <Text>{JSON.stringify(values)}</Text>
             {auth.error &&
-              <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+              <>
+                {auth.error.name === "EntityNotFound"
+                  ? <Text style={styles.errorMessage}>Server error: No such user exists</Text>
+                  : <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+                }
+              </>
             }
           </>
         )}
@@ -90,7 +123,7 @@ export const Login: React.FC = () => {
         <Text style={styles.singUpText}>
           Don't have an account?
           <TouchableOpacity
-            onPress={() => navigation.navigate('SignUp')}
+            onPress={navigateToSignUp}
           >
             <Text style={styles.link}>Sign Up</Text>
           </TouchableOpacity>
@@ -134,5 +167,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'red',
     marginTop: 10,
+  },
+  textFieldError: {
+    position: 'absolute',
+    top: 13,
+    right: 10,
+    fontSize: 16,
+    color: 'red',
   },
 });
