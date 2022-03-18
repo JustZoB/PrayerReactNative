@@ -7,6 +7,7 @@ import { Provider, useSelector } from "react-redux";
 import { AuthStackNavigator } from './src/navigators/AuthStackNavigator';
 import { Desk } from './src/screens/Desk';
 import store, { RootState } from './src/store/store';
+import { getUser } from './src/store/asyncStorage';
 
 const RootStack = createNativeStackNavigator();
 
@@ -20,6 +21,10 @@ const AppWrapper: () => ReactNode = () => {
 
 export const App: React.FC = () => {
   const auth = useSelector((state: RootState) => state.userLoginSlice);
+
+  React.useEffect(() => {
+    getUser()
+  }, [])
 
   return (
     <>

@@ -1,7 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react'
 import { StyleSheet, Text, SafeAreaView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../components/Button';
+import { setItem } from '../store/asyncStorage';
 import { RootState } from '../store/store';
 import { logOut } from '../store/userLogin/reducers';
 import { Column } from './Column';
@@ -13,6 +15,9 @@ export const Desk: React.FC = () => {
   console.log(columnsList)
 
   const onLogOut = () => {
+    AsyncStorage.removeItem('userToken')
+    AsyncStorage.removeItem('userName')
+    AsyncStorage.removeItem('userEmail')
     dispatch(logOut({}))
   }
 

@@ -3,6 +3,7 @@ import types from './types';
 
 import axios, { User } from '../../../api/axios';
 import { logInSuccess, registerSuccess, logInFailure, registerFailure } from './reducers';
+import { setItem } from '../asyncStorage';
 
 const logIn = async (email: string, password: string) => {
   const response = await axios.post<User>(`/auth/sign-in`, {
@@ -34,6 +35,9 @@ export function* logInSaga({ payload: { email, password } }) {
     const response = yield logIn(email, password)
     if (response.user) {
       yield put(logInSuccess(response))
+      setItem('userToken', response.user.token)
+      setItem('userName', response.user.name)
+      setItem('userEmail', response.user.email)
     } else if (response.error) {
       yield put(logInFailure(response))
     }
