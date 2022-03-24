@@ -15,8 +15,8 @@ export interface SignUp {
 
 export interface User {
   id?: number,
-  email: string,
-  name: string,
+  email?: string,
+  name?: string,
   token: string,
 }
 

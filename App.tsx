@@ -23,7 +23,6 @@ const AppWrapper: () => ReactNode = () => {
 export const App: React.FC = () => {
   const auth = useSelector((state: RootState) => state.userLoginSlice);
   const dispatch = useDispatch()
-  // const [token, setToken] = useState<string>('')
 
   React.useEffect(() => {
     dispatch(getTokenStart())

@@ -3,7 +3,7 @@ import { User } from '../../services/axios';
 
 type UserState = {
   user: User | undefined
-  loading: boolean,
+  loading: boolean
   isDataLoaded: boolean
   error: Error | undefined
 }
@@ -39,8 +39,7 @@ const userSlice = createSlice({
       state.error = undefined
     },
     setToken(state, action: PayloadAction<{ token: string, }>) {
-      console.log('REDUCER', action.payload)
-      state.user.token = action.payload.token
+      state.user = { token: action.payload.token }
     },
     changeLoading(state, action: PayloadAction<{ loading: boolean, }>) {
       state.loading = action.payload.loading

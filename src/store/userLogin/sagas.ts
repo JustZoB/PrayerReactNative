@@ -42,7 +42,6 @@ export function* getTokenSaga() {
   yield put(changeIsDataLoading({ isDataLoaded: true }))
   try {
     const response = yield getTokenAsyncStorage()
-    console.log('saga', response)
     yield put(setToken(response))
   } catch (error) {
     console.log('saga error', error)

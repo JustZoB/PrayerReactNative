@@ -9,14 +9,9 @@ export const setItem = async (name: string, item: string) => {
 }
 
 export const getTokenAsyncStorage = async () => {
-  try {
-    await AsyncStorage.getItem('userToken').then(value => {
-      if (value !== null) {
-        console.log('Token: ', { token: value })
-        return { token: value }
-      }
-    })
-  } catch (error) {
-    console.log('Error: ', error)
-  }
+  return await AsyncStorage.getItem('userToken').then(value => {
+    if (value !== null) {
+      return { token: value }
+    }
+  })
 }
