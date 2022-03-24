@@ -1,4 +1,4 @@
-import { SignIn, SignUp, User } from '../../../api/axios';
+import { SignIn, SignUp } from '../../services/axios';
 import { createAction } from '@reduxjs/toolkit';
 import types from './types';
 

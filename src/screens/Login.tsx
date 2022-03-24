@@ -11,6 +11,8 @@ import { Button } from '../components/Button';
 import { logInStart } from '../store/userLogin/action';
 import { RootState } from '../store/store';
 import { clearLogInErrors } from '../store/userLogin/reducers';
+import { AppLoader } from '../components/AppLoader';
+import { loginValidate } from '../utils/validate';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
@@ -22,25 +24,6 @@ export const Login: React.FC = () => {
     navigation.navigate('SignUp')
   }
 
-  const validate = (values: { email: string, password: string }) => {
-    const errors: { email?: string, password?: string } = {}
-
-    if (!values.email) {
-      errors.email = 'Required'
-    }
-    if (values.email && values.email.length > 20) {
-      errors.email = 'Too long'
-    }
-    if (!values.password) {
-      errors.password = 'Required'
-    }
-    if (values.password && values.password.length > 20) {
-      errors.password = 'Too long'
-    }
-
-    return errors
-  }
-
   const onSignIn = (values: { email: string, password: string }) => {
     dispatch(clearLogInErrors({}))
     dispatch(logInStart({
@@ -50,74 +33,79 @@ export const Login: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.headerText}>
-        Sign In
-      </Text>
-      <Form
-        onSubmit={onSignIn}
-        validate={validate}
-        render={({ handleSubmit, submitting }) => (
-          <>
-            <Field
-              name='email'
-              render={({ input, meta }) => (
-                <View style={styles.inputContainer}>
-                  <TextField
-                    {...input}
-                    value={input.value}
-                    placeholder='E-mail'
-                    onTextChange={input.onChange}
-                  />
-                  {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
-                </View>
-              )}
-            />
-            <Field
-              name='password'
-              render={({ input, meta }) => (
-                <View style={styles.inputContainer}>
-                  <TextField
-                    {...input}
-                    placeholder='Password'
-                    value={input.value}
-                    onTextChange={input.onChange}
-                    isSecure={true}
-                  />
-                  {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
-                </View>
-              )}
-            />
-
-            <Button
-              title='Sign In'
-              disabled={submitting}
-              onPress={handleSubmit}
-            />
-            {auth.error &&
-              <>
-                {auth.error.name === "EntityNotFound"
-                  ? <Text style={styles.errorMessage}>Server error: No such user exists</Text>
-                  : <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
-                }
-              </>
-            }
-          </>
-        )}
-      />
-
-      <View style={styles.signUpBlock}>
-        <Text style={styles.singUpText}>
-          Don't have an account?
-          <TouchableOpacity
-            onPress={navigateToSignUp}
-          >
-            <Text style={styles.link}>Sign Up</Text>
-          </TouchableOpacity>
+    <>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.headerText}>
+          Sign In
         </Text>
-      </View>
+        <Form
+          onSubmit={onSignIn}
+          validate={loginValidate}
+          render={({ handleSubmit, submitting }) => (
+            <>
+              <Field
+                name='email'
+                render={({ input, meta }) => (
+                  <View style={styles.inputContainer}>
+                    <TextField
+                      {...input}
+                      value={input.value}
+                      placeholder='E-mail'
+                      onTextChange={input.onChange}
+                    />
+                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                  </View>
+                )}
+              />
+              <Field
+                name='password'
+                render={({ input, meta }) => (
+                  <View style={styles.inputContainer}>
+                    <TextField
+                      {...input}
+                      placeholder='Password'
+                      value={input.value}
+                      onTextChange={input.onChange}
+                      isSecure={true}
+                    />
+                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                  </View>
+                )}
+              />
 
-    </SafeAreaView>
+              <Button
+                title='Sign In'
+                disabled={submitting}
+                onPress={handleSubmit}
+              />
+              {auth.error &&
+                <>
+                  {auth.error.name === "EntityNotFound"
+                    ? <Text style={styles.errorMessage}>Server error: No such user exists</Text>
+                    : <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+                  }
+                </>
+              }
+            </>
+          )}
+        />
+
+        <View style={styles.signUpBlock}>
+          <Text style={styles.singUpText}>
+            Don't have an account?
+            <TouchableOpacity
+              onPress={navigateToSignUp}
+            >
+              <Text style={styles.link}>Sign Up</Text>
+            </TouchableOpacity>
+          </Text>
+        </View>
+
+      </SafeAreaView>
+      {auth.loading &&
+        <AppLoader />
+      }
+    </>
   );
 };
 

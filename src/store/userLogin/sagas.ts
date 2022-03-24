@@ -1,36 +1,12 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import types from './types';
 
-import axios, { User } from '../../../api/axios';
-import { logInSuccess, registerSuccess, logInFailure, registerFailure } from './reducers';
-import { setItem } from '../asyncStorage';
-
-const logIn = async (email: string, password: string) => {
-  const response = await axios.post<User>(`/auth/sign-in`, {
-    email,
-    password,
-  })
-  if (response.data.token) {
-    return { user: response.data }
-  } else {
-    return { error: response.data }
-  }
-}
-
-const register = async (email: string, name: string, password: string) => {
-  const response = await axios.post<User>(`/auth/sign-up`, {
-    email,
-    name,
-    password,
-  })
-  if (response.data.token) {
-    return { user: response.data }
-  } else {
-    return { error: response.data }
-  }
-}
+import { logInSuccess, registerSuccess, logInFailure, registerFailure, changeLoading } from './reducers';
+import { setItem } from '../../services/asyncStorage';
+import { logIn, register } from '../../services/APIService';
 
 export function* logInSaga({ payload: { email, password } }) {
+  yield put(changeLoading({ loading: true }))
   try {
     const response = yield logIn(email, password)
     if (response.user) {
@@ -44,9 +20,11 @@ export function* logInSaga({ payload: { email, password } }) {
   } catch (error) {
     yield put(logInFailure(error))
   }
+  yield put(changeLoading({ loading: false }))
 }
 
 export function* registerSaga({ payload: { email, name, password } }) {
+  yield put(changeLoading({ loading: true }))
   try {
     const response = yield register(email, name, password)
     if (response.user) {
@@ -57,6 +35,7 @@ export function* registerSaga({ payload: { email, name, password } }) {
   } catch (error) {
     yield put(registerFailure(error))
   }
+  yield put(changeLoading({ loading: false }))
 }
 
 export function* onLogInStart() {

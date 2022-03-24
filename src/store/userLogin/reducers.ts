@@ -1,13 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { User } from '../../../api/axios';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User } from '../../services/axios';
 
 type UserState = {
   user: User | undefined
+  loading: boolean
   error: Error | undefined
 }
 
 const initialState: UserState = {
   user: undefined as User,
+  loading: false,
   error: undefined,
 }
 
@@ -16,7 +18,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logInSuccess: (state, action) => {
-      console.log('qreqrqrqrqrqrqr', action.payload)
       return action.payload
     },
     logInFailure: (state, action) => {
@@ -28,15 +29,23 @@ const userSlice = createSlice({
     registerFailure: (state, action) => {
       return action.payload
     },
-    logOut: (state, action) => {
-      return action.payload
+    logOut(state, action) {
+      state.user = undefined
+      state.error = undefined
     },
-    clearLogInErrors: (state, action) => {
-      return action.payload
+    clearLogInErrors(state, action) {
+      state.error = undefined
+    },
+    changeLoading(state, action: PayloadAction<{
+      loading: boolean,
+    }>) {
+      console.log('LOADING ', action.payload.loading)
+      state.loading = action.payload.loading
+      console.log('STATE LOADING ', action.payload.loading)
     },
   },
 });
 
-export const { logInSuccess, logInFailure, registerSuccess, registerFailure, logOut, clearLogInErrors } = userSlice.actions;
+export const { logInSuccess, logInFailure, registerSuccess, registerFailure, logOut, clearLogInErrors, changeLoading } = userSlice.actions;
 
 export default userSlice.reducer;

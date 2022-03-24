@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, TextInput, StyleSheet, Text } from "react-native";
 import CheckBox from '@react-native-community/checkbox';
+import colors from '../utils/colors'
 
 interface TextFieldProps {
   placeholder: string;
@@ -43,7 +44,7 @@ export const TextField: React.FC<TextFieldProps> = ({ placeholder, isSecure = fa
 const styles = StyleSheet.create({
   textField: {
     borderWidth: 1,
-    borderColor: '#E5E5E5',
+    borderColor: colors.gray,
     borderStyle: 'solid',
     borderRadius: 10,
     paddingHorizontal: 15,
