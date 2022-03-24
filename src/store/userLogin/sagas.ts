@@ -1,8 +1,8 @@
-import { all, call, put, takeEvery } from 'redux-saga/effects';
+import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import types from './types';
 
-import { logInSuccess, registerSuccess, logInFailure, registerFailure, changeLoading } from './reducers';
-import { setItem } from '../../services/asyncStorage';
+import { logInSuccess, registerSuccess, logInFailure, registerFailure, changeLoading, changeIsDataLoading, setToken } from './reducers';
+import { getTokenAsyncStorage, setItem } from '../../services/asyncStorage';
 import { logIn, register } from '../../services/APIService';
 
 export function* logInSaga({ payload: { email, password } }) {
@@ -38,6 +38,18 @@ export function* registerSaga({ payload: { email, name, password } }) {
   yield put(changeLoading({ loading: false }))
 }
 
+export function* getTokenSaga() {
+  yield put(changeIsDataLoading({ isDataLoaded: true }))
+  try {
+    const response = yield getTokenAsyncStorage()
+    console.log('saga', response)
+    yield put(setToken(response))
+  } catch (error) {
+    console.log('saga error', error)
+  }
+  yield put(changeIsDataLoading({ isDataLoaded: false }))
+}
+
 export function* onLogInStart() {
   yield takeEvery(types.LOG_IN_START, logInSaga);
 }
@@ -46,9 +58,14 @@ export function* onRegisterStart() {
   yield takeEvery(types.REGISTER_START, registerSaga);
 }
 
+export function* onGetToken() {
+  yield takeEvery(types.GET_TOKEN_START, getTokenSaga);
+}
+
 export function* authSagas() {
   yield all([
     call(onLogInStart),
     call(onRegisterStart),
+    call(onGetToken),
   ]);
 }
