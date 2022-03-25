@@ -24,3 +24,13 @@ export const register = async (email: string, name: string, password: string) =>
     return { error: response.data }
   }
 }
+
+export const columns = async () => {
+  const response = await axios.get<User>(`/columns`)
+  console.log('API', response)
+  if (response.data) {
+    return { columns: response.data }
+  } else {
+    return { error: response.data }
+  }
+}

@@ -1,6 +1,19 @@
 import axios from 'axios';
 
-const instance = axios.create({ baseURL: 'https://prayer.herokuapp.com/' });
+const baseURL = 'https://prayer.herokuapp.com/';
+const instance = axios.create({ baseURL: baseURL });
+
+export const setAccessToken = (accessToken: string) => {
+  instance.interceptors.request.use(
+    config => {
+      config.headers.authorization = `Bearer ${accessToken}`
+      return config;
+    },
+    error => {
+      return Promise.reject(error)
+    }
+  )
+}
 
 export interface SignIn {
   email: string,

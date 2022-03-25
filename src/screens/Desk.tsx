@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react'
-import { StyleSheet, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppLoader } from '../components/AppLoader';
 import { Button } from '../components/Button';
-import { setItem } from '../store/asyncStorage';
+import { getColumnsStart } from '../store/columns/actions';
 import { RootState } from '../store/store';
 import { logOut } from '../store/userLogin/reducers';
 import { Column } from './Column';
@@ -12,7 +13,10 @@ export const Desk: React.FC = () => {
   const auth = useSelector((state: RootState) => state.userLoginSlice);
   const columnsList = useSelector((state: RootState) => state.columnsSlice);
   const dispatch = useDispatch();
-  console.log(columnsList)
+
+  React.useEffect(() => {
+    dispatch(getColumnsStart())
+  }, [])
 
   const onLogOut = () => {
     AsyncStorage.removeItem('userToken')
@@ -22,21 +26,25 @@ export const Desk: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.headerText}>
-        Desk {auth.user.name}
-        {/* {columnsList.columns.map(({ id }) => (
-          <Column
-            key={id}
-            id={id}
-          />
-        ))} */}
+    <>
+      {columnsList.isDataLoaded &&
+        <AppLoader />
+      }
+      <SafeAreaView style={styles.container}>
+        <View>
+          {columnsList.columns.map(({ id }) => (
+            <Column
+              key={id}
+              id={id}
+            />
+          ))}
+        </View>
         <Button
           title='Log out'
           onPress={onLogOut}
         />
-      </Text>
-    </SafeAreaView>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -44,7 +52,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-    justifyContent: 'center',
     width: '100%',
   },
   headerText: {
