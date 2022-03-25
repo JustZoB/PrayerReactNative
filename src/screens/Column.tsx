@@ -1,41 +1,36 @@
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
 import { useSelector } from 'react-redux';
+import { DeskStackParams } from '../navigators/DeskStackNavigator';
+import { ColumnRouteType } from '../services/navigationProps';
 import { getColumnTitle } from '../store/columns/selectors';
 import { RootState } from '../store/store';
-import colors from '../utils/colors'
 
-export const Column: React.FC<ColumnProps> = ({ id }) => {
+export const Column: React.FC<ColumnProps> = ({ route }) => {
+  // const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const columnsList = useSelector((state: RootState) => state.columnsSlice);
-  const title = useSelector((state: RootState) => getColumnTitle(columnsList, id));
+  const title = useSelector((state: RootState) => getColumnTitle(columnsList, route.params.id));
+  console.log(route.params.id)
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.columnButton}>
-        {title}
-      </Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text>{title}</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: colors.gray,
-    borderStyle: 'solid',
-    borderRadius: 4,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    marginBottom: 10,
-  },
-  columnButton: {
-    fontSize: 17,
-    lineHeight: 20,
+    flex: 1,
+    padding: 15,
     width: '100%',
-    fontWeight: 'bold',
   },
 });
 
 interface ColumnProps {
-  id: number,
+  route: ColumnRouteType;
 }

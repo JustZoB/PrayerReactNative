@@ -5,12 +5,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider, useDispatch, useSelector } from "react-redux";
 
 import { AuthStackNavigator } from './src/navigators/AuthStackNavigator';
-import { Desk } from './src/screens/Desk';
 import store, { RootState } from './src/store/store';
 import { AppLoader } from './src/components/AppLoader';
 import { getTokenStart } from './src/store/userLogin/action';
+import { DeskStackNavigator } from './src/navigators/DeskStackNavigator';
 
 const RootStack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
 
 const AppWrapper: () => ReactNode = () => {
   return (
@@ -35,12 +36,15 @@ export const App: React.FC = () => {
       ) :
         <>
           {auth.user ? (
-            <Desk />
+            <NavigationContainer>
+              <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+                <HomeStack.Screen name={'AuthStack'} component={DeskStackNavigator} />
+              </HomeStack.Navigator>
+            </NavigationContainer>
           ) : (
             <NavigationContainer>
               <RootStack.Navigator screenOptions={{ headerShown: false }}>
                 <RootStack.Screen name={'AuthStack'} component={AuthStackNavigator} />
-                <RootStack.Screen name={'HomeStack'} component={Desk} />
               </RootStack.Navigator>
             </NavigationContainer>
           )}

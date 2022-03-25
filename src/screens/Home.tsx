@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react'
 import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,12 +9,15 @@ import { Button } from '../components/Button';
 import { getColumnsStart } from '../store/columns/actions';
 import { RootState } from '../store/store';
 import { logOut } from '../store/userLogin/reducers';
-import { Column } from './Column';
+import { Column as ColumnButton } from '../components/ColumnButton';
+import { DeskStackParams } from '../navigators/DeskStackNavigator';
 
-export const Desk: React.FC = () => {
+export const Home: React.FC = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const auth = useSelector((state: RootState) => state.userLoginSlice);
   const columnsList = useSelector((state: RootState) => state.columnsSlice);
   const dispatch = useDispatch();
+  const DeskStack = createNativeStackNavigator();
 
   React.useEffect(() => {
     dispatch(getColumnsStart())
@@ -33,9 +38,12 @@ export const Desk: React.FC = () => {
       <SafeAreaView style={styles.container}>
         <View>
           {columnsList.columns.map(({ id }) => (
-            <Column
+            <ColumnButton
               key={id}
               id={id}
+              onPress={() => {
+                navigation.navigate('Column', { id })
+              }}
             />
           ))}
         </View>
