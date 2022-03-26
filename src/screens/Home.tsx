@@ -27,7 +27,7 @@ export const Home: React.FC = () => {
     AsyncStorage.removeItem('userToken')
     AsyncStorage.removeItem('userName')
     AsyncStorage.removeItem('userEmail')
-    dispatch(logOut({}))
+    dispatch(logOut())
   }
 
   return (
@@ -37,15 +37,19 @@ export const Home: React.FC = () => {
       }
       <SafeAreaView style={styles.container}>
         <View>
-          {columnsList.columns.map(({ id }) => (
-            <ColumnButton
-              key={id}
-              id={id}
-              onPress={() => {
-                navigation.navigate('Column', { id })
-              }}
-            />
-          ))}
+          {columnsList.columns &&
+            <>
+              {columnsList.columns.map(({ id }) => (
+                <ColumnButton
+                  key={id}
+                  id={id}
+                  onPress={() => {
+                    navigation.navigate('ColumnTabNavigator', { id })
+                  }}
+                />
+              ))}
+            </>
+          }
         </View>
         <Button
           title='Log out'
