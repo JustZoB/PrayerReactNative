@@ -19,12 +19,12 @@ export const SignUp: React.FC = () => {
   const auth = useSelector((state: RootState) => state.userLoginSlice);
 
   const navigateToSignIn = () => {
-    dispatch(clearLogInErrors({}))
+    dispatch(clearLogInErrors())
     navigation.navigate('Login')
   }
 
   const onSignUp = (values: { email: string, name: string, password: string }) => {
-    dispatch(clearLogInErrors({}))
+    dispatch(clearLogInErrors())
     dispatch(registerStart({
       email: values.email,
       name: values.name,

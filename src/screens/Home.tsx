@@ -9,7 +9,7 @@ import { Button } from '../components/Button';
 import { getColumnsStart } from '../store/columns/actions';
 import { RootState } from '../store/store';
 import { logOut } from '../store/userLogin/reducers';
-import { Column as ColumnButton } from '../components/ColumnButton';
+import { ColumnButton } from '../components/ColumnButton';
 import { DeskStackParams } from '../navigators/DeskStackNavigator';
 
 export const Home: React.FC = () => {

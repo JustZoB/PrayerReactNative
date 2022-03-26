@@ -1,25 +1,25 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
-import { getColumnTitle } from '../store/columns/selectors';
+import { getPrayerTitle } from '../store/prayers/selectors';
 import { RootState } from '../store/store';
 import colors from '../utils/colors'
 
-interface ColumnProps {
+interface PrayerButtonProps {
   id: number;
-  onPress: Function;
+  onPress?: Function;
 }
 
-export const ColumnButton: React.FC<ColumnProps> = ({ id, onPress }) => {
-  const columnsList = useSelector((state: RootState) => state.columnsSlice);
-  const title = useSelector((state: RootState) => getColumnTitle(columnsList, id));
+export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress }) => {
+  const prayersList = useSelector((state: RootState) => state.prayersSlice);
+  const title = useSelector((state: RootState) => getPrayerTitle(prayersList, id));
 
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() => onPress()}
     >
-      <Text style={styles.columnButton}>
+      <Text style={styles.prayerButton}>
         {title}
       </Text>
     </TouchableOpacity>
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginBottom: 10,
   },
-  columnButton: {
+  prayerButton: {
     fontSize: 17,
     lineHeight: 20,
     width: '100%',

@@ -41,12 +41,12 @@ export interface Columns {
 }
 
 export interface Prayer {
-  id: number,
+  id?: number,
   title: string,
-  description: string,
-  checked: boolean,
+  description?: string,
+  checked?: boolean,
   columnId: number,
-  commentsIds: string[],
+  commentsIds?: string[] | undefined,
 }
 
 export interface Comments {

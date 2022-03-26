@@ -41,3 +41,16 @@ export const singUpValidate = (values: { email: string, name: string, password: 
 
   return errors
 }
+
+export const prayerValidate = (values: { title: string }) => {
+  const errors: { title?: string } = {}
+
+  if (!values.title) {
+    errors.title = 'Required'
+  }
+  if (values.title && values.title.length > 20) {
+    errors.title = 'Too long'
+  }
+
+  return errors
+}
