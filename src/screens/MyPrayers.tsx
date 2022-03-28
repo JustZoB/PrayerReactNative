@@ -12,12 +12,16 @@ import { getPrayersByColumnId } from '../store/prayers/selectors';
 import { RootState } from '../store/store';
 import { prayerValidate } from '../utils/validate';
 import colors from '../utils/colors'
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { DeskStackParams } from '../navigators/DeskStackNavigator';
 
 interface ColumnProps {
   route: ColumnRouteType;
 }
 
 export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   console.log(route.params.id)
   const prayers = useSelector((state: RootState) => state.prayersSlice);
   const dispatch = useDispatch();
@@ -80,19 +84,6 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
           <AppLoader />
         } ? {
           <>
-            {checkedPrayers &&
-              <>
-                {checkedPrayers.map(({ id }) => (
-                  <PrayerButton
-                    key={id}
-                    id={id}
-                  // onPress={() => {
-                  //   navigation.navigate('Prayer', { id })
-                  // }}
-                  />
-                ))}
-              </>
-            }
           </>
         } */}
         {thisPrayers &&
@@ -101,9 +92,9 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
               <PrayerButton
                 key={id}
                 id={id}
-              // onPress={() => {
-              //   navigation.navigate('Prayer', { id })
-              // }}
+                onPress={() => {
+                  navigation.navigate('Prayer', { id })
+                }}
               />
             ))}
           </>

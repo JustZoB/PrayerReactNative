@@ -13,6 +13,21 @@ export const getPrayerTitle = (
   })[0].title
 }
 
+export const getPrayerById = (
+  state: { prayers: Prayer[] },
+  id: number,
+): Prayer => {
+  if (state.prayers !== undefined) {
+    return state.prayers.filter(prayer => {
+      if (prayer.id === id) {
+        return prayer
+      }
+
+      return undefined
+    })[0]
+  }
+}
+
 export const getPrayersByColumnId = (
   state: { prayers: Prayer[] },
   columnId: number,

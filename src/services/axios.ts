@@ -49,6 +49,19 @@ export interface Prayer {
   commentsIds?: string[] | undefined,
 }
 
+export interface PrayerPost {
+  id?: number,
+  title: string,
+  description?: string,
+  checked?: boolean,
+  column: {
+    id: number,
+    description?: string | null,
+    title: string,
+  },
+  commentsIds?: string[] | undefined,
+}
+
 export interface Comments {
   id: number,
   body: string,

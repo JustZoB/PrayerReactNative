@@ -4,3 +4,7 @@ export interface ColumnRouteType {
   params: { id: number },
   path: Object | undefined,
 }
+
+export interface PrayerRouteType {
+  params: { id: number },
+}
