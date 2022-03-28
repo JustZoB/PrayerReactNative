@@ -10,7 +10,7 @@ type PrayersState = {
 const initialState: PrayersState = {
   prayers: undefined as Prayer[],
   isDataLoaded: false,
-  error: undefined
+  error: undefined,
 }
 
 const prayersSlice = createSlice({

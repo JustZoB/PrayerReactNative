@@ -8,8 +8,10 @@ import { PrayerButton } from '../components/PrayerButton';
 import { TextField } from '../components/TextField';
 import { ColumnRouteType } from '../services/navigationProps';
 import { addPrayerStart, getPrayersStart } from '../store/prayers/actions';
+import { getPrayersByColumnId } from '../store/prayers/selectors';
 import { RootState } from '../store/store';
 import { prayerValidate } from '../utils/validate';
+import colors from '../utils/colors'
 
 interface ColumnProps {
   route: ColumnRouteType;
@@ -19,6 +21,7 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
   console.log(route.params.id)
   const prayers = useSelector((state: RootState) => state.prayersSlice);
   const dispatch = useDispatch();
+  const thisPrayers = useSelector((state: RootState) => getPrayersByColumnId(state.prayersSlice, route.params.id));
 
   const onAddPrayer = (values: { title: string }) => {
     dispatch(addPrayerStart({
@@ -32,22 +35,11 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
   }, [])
 
   return (
-    // <>
-    //   {prayersList.isDataLoaded &&
-    //     <AppLoader />
-    //   } ? {
-    //     <SafeAreaView style={styles.container}>
-    //       <View>
-    //         <Text>MyPrayers</Text>
-    //       </View>
-    //     </SafeAreaView>
-    //   }
-    // </>
     <SafeAreaView style={styles.container}>
       <Form
         onSubmit={onAddPrayer}
         validate={prayerValidate}
-        render={({ handleSubmit, submitting }) => (
+        render={({ handleSubmit, submitting, form }) => (
           <>
             <Field
               name='title'
@@ -66,7 +58,10 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
             <Button
               title='Add prayer'
               disabled={submitting}
-              onPress={handleSubmit}
+              onPress={() => {
+                handleSubmit()
+                form.reset()
+              }}
             />
             {prayers.error &&
               <>
@@ -81,9 +76,28 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
       />
 
       <View>
-        {prayers.prayers &&
+        {/* {prayers.isDataLoaded &&
+          <AppLoader />
+        } ? {
           <>
-            {prayers.prayers.map(({ id }) => (
+            {checkedPrayers &&
+              <>
+                {checkedPrayers.map(({ id }) => (
+                  <PrayerButton
+                    key={id}
+                    id={id}
+                  // onPress={() => {
+                  //   navigation.navigate('Prayer', { id })
+                  // }}
+                  />
+                ))}
+              </>
+            }
+          </>
+        } */}
+        {thisPrayers &&
+          <>
+            {thisPrayers.map(({ id }) => (
               <PrayerButton
                 key={id}
                 id={id}
@@ -101,7 +115,7 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    overflow: 'scroll',
     padding: 15,
     width: '100%',
   },
@@ -111,7 +125,7 @@ const styles = StyleSheet.create({
   errorMessage: {
     fontSize: 16,
     textAlign: 'center',
-    color: 'red',
+    color: colors.red,
     marginTop: 10,
   },
   textFieldError: {
@@ -119,6 +133,6 @@ const styles = StyleSheet.create({
     top: 13,
     right: 10,
     fontSize: 16,
-    color: 'red',
+    color: colors.red,
   },
 });

@@ -1,9 +1,10 @@
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { getPrayerTitle } from '../store/prayers/selectors';
+import { getPrayerChecked, getPrayerTitle } from '../store/prayers/selectors';
 import { RootState } from '../store/store';
 import colors from '../utils/colors'
+import CheckBox from '@react-native-community/checkbox';
 
 interface PrayerButtonProps {
   id: number;
@@ -13,13 +14,20 @@ interface PrayerButtonProps {
 export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress }) => {
   const prayersList = useSelector((state: RootState) => state.prayersSlice);
   const title = useSelector((state: RootState) => getPrayerTitle(prayersList, id));
+  const [isChecked, setIsChecked] = useState(useSelector((state: RootState) => getPrayerChecked(prayersList, id)));
 
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() => onPress()}
     >
-      <Text style={styles.prayerButton}>
+      <View style={styles.stick} />
+      <CheckBox
+        value={isChecked}
+        onValueChange={() => setIsChecked(!isChecked)}
+        style={styles.checkbox}
+      />
+      <Text style={styles.text}>
         {title}
       </Text>
     </TouchableOpacity>
@@ -28,18 +36,28 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     borderColor: colors.gray,
     borderStyle: 'solid',
-    borderRadius: 4,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    marginBottom: 10,
+    borderBottomWidth: 1,
+    paddingHorizontal: 5,
+    paddingVertical: 20,
   },
-  prayerButton: {
+  stick: {
+    width: 3,
+    backgroundColor: colors.darkRed,
+    height: 22,
+    borderRadius: 5,
+    marginRight: 5,
+  },
+  text: {
     fontSize: 17,
     lineHeight: 20,
     width: '100%',
-    fontWeight: 'bold',
+  },
+  checkbox: {
+    alignSelf: 'center',
+    marginRight: 5,
   },
 });

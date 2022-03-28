@@ -12,6 +12,7 @@ import { RootState } from '../store/store';
 import { clearLogInErrors } from '../store/userLogin/reducers';
 import { singUpValidate } from '../utils/validate';
 import { AppLoader } from '../components/AppLoader';
+import colors from '../utils/colors'
 
 export const SignUp: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
@@ -148,13 +149,13 @@ const styles = StyleSheet.create({
   },
   link: {
     fontSize: 16,
-    color: '#72A8BC',
+    color: colors.lightBlue,
     paddingLeft: 5,
   },
   errorMessage: {
     fontSize: 16,
     textAlign: 'center',
-    color: 'red',
+    color: colors.red,
     marginTop: 10,
   },
   textFieldError: {
@@ -162,6 +163,6 @@ const styles = StyleSheet.create({
     top: 13,
     right: 10,
     fontSize: 16,
-    color: 'red',
+    color: colors.red,
   },
 });

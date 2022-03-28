@@ -4,6 +4,7 @@ import React from 'react'
 import { Form, Field } from 'react-final-form'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { AuthStackParams } from '../navigators/AuthStackNavigator';
+import colors from '../utils/colors'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { TextField } from '../components/TextField';
@@ -134,13 +135,13 @@ const styles = StyleSheet.create({
   },
   link: {
     fontSize: 16,
-    color: '#72A8BC',
+    color: colors.lightBlue,
     paddingLeft: 5,
   },
   errorMessage: {
     fontSize: 16,
     textAlign: 'center',
-    color: 'red',
+    color: colors.red,
     marginTop: 10,
   },
   textFieldError: {
@@ -148,6 +149,6 @@ const styles = StyleSheet.create({
     top: 13,
     right: 10,
     fontSize: 16,
-    color: 'red',
+    color: colors.red,
   },
 });
