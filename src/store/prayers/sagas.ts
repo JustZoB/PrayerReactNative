@@ -28,11 +28,11 @@ export function* postPrayerSaga({ payload: { title, columnId } }) {
   yield put(changeIsDataLoading({ isDataLoaded: false }))
 }
 
-export function* checkPrayerSaga(prayer: Prayer) {
+export function* checkPrayerSaga({ payload: { id, checked } }) {
   yield put(changeIsDataLoading({ isDataLoaded: true }))
-  console.log('SAGA PUT PRAYER GETTING', prayer.id)
+  console.log('SAGA PUT PRAYER GETTING', id, checked)
   try {
-    const response = yield checkPrayer(prayer)
+    const response = yield checkPrayer(id, checked)
     console.log('SAGA PUT PRAYER', response)
     yield put(updatePrayer(response))
   } catch (error) {

@@ -27,10 +27,10 @@ const prayersSlice = createSlice({
     addPrayer(state, action: PayloadAction<Prayer>) {
       state.prayers.push(action.payload)
     },
-    updatePrayer(state, action: PayloadAction<{ id: number, }>) {
+    updatePrayer(state, action: PayloadAction<Prayer>) {
       state.prayers.filter(prayer => {
         if (prayer.id === action.payload.id) {
-          return { ...prayer, checked: !prayer.checked }
+          return { ...prayer, checked: action.payload.checked }
         }
 
         return prayer

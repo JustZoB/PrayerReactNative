@@ -1,4 +1,4 @@
-import axios, { Prayer, PrayerPost, User } from "./axios"
+import axios, { Prayer, PrayerPost, User, Comment } from "./axios"
 
 export const logIn = async (email: string, password: string) => {
   const response = await axios.post<User>(`/auth/sign-in`, {
@@ -44,6 +44,37 @@ export const prayers = async () => {
   }
 }
 
+export const comments = async () => {
+  const response = await axios.get<Comment[]>(`/comments`)
+  console.log('API COMMENTS', response.data)
+  if (response.data) {
+    return { comments: response.data }
+  } else {
+    return { error: response.data }
+  }
+}
+
+export const postComment = async (body: string, prayerId: number) => {
+  const response = await axios.post<Comment>(`/comments`, {
+    body,
+    prayerId,
+    created: new Date,
+  })
+  console.log('API POST COMMENT', response.data)
+
+  if (response.data) {
+    return {
+      id: response.data.id,
+      body: response.data.body,
+      created: response.data.created,
+      prayerId: response.data.prayerId,
+      userId: response.data.userId,
+    }
+  } else {
+    return { error: response.data }
+  }
+}
+
 export const postPrayer = async (title: string, columnId: number) => {
   const response = await axios.post<PrayerPost>(`/prayers`, {
     title,
@@ -67,13 +98,9 @@ export const postPrayer = async (title: string, columnId: number) => {
   }
 }
 
-export const checkPrayer = async (prayer: Prayer) => {
-  const response = await axios.put<PrayerPost>(`/prayers`, {
-    id: prayer.id,
-    title: prayer.title,
-    description: prayer.description,
-    checked: !prayer.description,
-    columnId: prayer.columnId,
+export const checkPrayer = async (id: number, checked: boolean) => {
+  const response = await axios.put<Prayer>(`/prayers/${id}`, {
+    checked: checked,
   })
   console.log('API PUT PRAYER', response.data)
 
@@ -83,7 +110,7 @@ export const checkPrayer = async (prayer: Prayer) => {
       title: response.data.title,
       description: response.data.description,
       checked: response.data.checked,
-      columnId: response.data.column.id,
+      columnId: response.data.columnId,
       commentsIds: response.data.commentsIds,
     }
   } else {

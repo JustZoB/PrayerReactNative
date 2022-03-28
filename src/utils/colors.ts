@@ -6,6 +6,7 @@ enum Colors {
   backgroundOpacity = 'rgba(0,0,0,0.3)',
   gray = '#E5E5E5',
   lightBlue = '#72A8BC',
+  black = '#514D47',
 };
 
 export default Colors;

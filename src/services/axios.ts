@@ -62,12 +62,12 @@ export interface PrayerPost {
   commentsIds?: string[] | undefined,
 }
 
-export interface Comments {
-  id: number,
+export interface Comment {
+  id?: number,
   body: string,
-  created: string,
+  created?: string,
   prayerId: number,
-  userId: number,
+  userId?: number,
 }
 
 export default instance

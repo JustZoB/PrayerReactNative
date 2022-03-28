@@ -9,7 +9,7 @@ import colors from '../utils/colors'
 export type DeskStackParams = {
   Home;
   Prayer;
-  ColumnTabNavigator;
+  ColumnTabNavigator: { id: number };
 }
 
 const DeskStack = createStackNavigator<DeskStackParams>();
@@ -25,16 +25,15 @@ export const DeskStackNavigator: React.FC = () => {
       <DeskStack.Screen
         name="ColumnTabNavigator"
         component={ColumnTabNavigator}
-        options={{ title: 'Column' }}
+        options={{ title: '' }}
       />
       <DeskStack.Screen
         name="Prayer"
         component={Prayer}
         options={{
-          title: 'Prayer item two which is for my family to love God whole heartedly.',
+          title: '',
           headerStyle: {
             backgroundColor: colors.beige,
-            height: 130,
           },
           headerTintColor: colors.white,
           headerTitleStyle: {

@@ -54,3 +54,16 @@ export const prayerValidate = (values: { title: string }) => {
 
   return errors
 }
+
+export const commentValidate = (values: { body: string }) => {
+  const errors: { body?: string } = {}
+
+  if (!values.body) {
+    errors.body = 'Required'
+  }
+  if (values.body && values.body.length > 20) {
+    errors.body = 'Too long'
+  }
+
+  return errors
+}

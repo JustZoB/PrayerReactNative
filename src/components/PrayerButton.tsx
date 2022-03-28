@@ -20,7 +20,7 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress }) => {
   const prayer = (useSelector((state: RootState) => getPrayerById(state.prayersSlice, id)));
 
   const checkPrayer = () => {
-    dispatch(checkPrayerStart(prayer))
+    dispatch(checkPrayerStart({ id, checked: !isChecked }))
   }
 
   return (
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 20,
     width: '100%',
+    color: colors.black,
   },
   checkbox: {
     alignSelf: 'center',
