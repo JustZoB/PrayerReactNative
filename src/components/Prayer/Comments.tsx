@@ -2,7 +2,7 @@ import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getCommentsStart } from "../../store/comments/actions";
-import { getCommentsByPrayerId } from "../../store/comments/selectors";
+import { getCommentBody, getCommentsByPrayerId } from "../../store/comments/selectors";
 import { RootState } from "../../store/store";
 import colors from '../../utils/colors'
 import { Comment } from './Comment'
@@ -21,7 +21,7 @@ export const Comments: React.FC<CommentsProps> = ({ id }) => {
 
   return (
     <View>
-      <Text style={styles.title}>Comments {id}</Text>
+      <Text style={styles.title}>Comments</Text>
       {thisComments &&
         <>
           {thisComments.map(({ id }) => (
