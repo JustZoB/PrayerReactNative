@@ -33,6 +33,9 @@ const prayersSlice = createSlice({
         prayer.checked = !prayer.checked
       }
     },
+    deletePrayer(state, action: PayloadAction<Prayer>) {
+      state.prayers = state.prayers.filter(prayer => prayer.id !== action.payload.id)
+    },
   },
 });
 
@@ -41,6 +44,7 @@ export const {
   changeIsDataLoading,
   addPrayer,
   updatePrayer,
+  deletePrayer,
 } = prayersSlice.actions;
 
 export default prayersSlice.reducer;

@@ -1,7 +1,6 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { postPrayer, prayers, checkPrayer } from '../../services/APIService';
-import { Prayer } from '../../services/axios';
-import { addPrayer, changeIsDataLoading, setPrayers, updatePrayer } from './reducers';
+import { postPrayer, prayers, checkPrayer, deletePrayerApi } from '../../services/APIService';
+import { addPrayer, changeIsDataLoading, deletePrayer, setPrayers, updatePrayer } from './reducers';
 import types from './types';
 
 export function* getPrayersSaga() {
@@ -41,6 +40,19 @@ export function* checkPrayerSaga({ payload: { id, checked } }) {
   yield put(changeIsDataLoading({ isDataLoaded: false }))
 }
 
+export function* deletePrayerSaga({ payload: { id } }) {
+  yield put(changeIsDataLoading({ isDataLoaded: true }))
+  console.log('SAGA DELETE PRAYER GETTING', id)
+  try {
+    const response = yield deletePrayerApi(id)
+    console.log('SAGA DELETE PRAYER', response)
+    yield put(deletePrayer(response))
+  } catch (error) {
+    console.log('SAGA DELETE PRAYER ERROR', error)
+  }
+  yield put(changeIsDataLoading({ isDataLoaded: false }))
+}
+
 export function* onGetPrayers() {
   yield takeEvery(types.GET_PRAYERS, getPrayersSaga);
 }
@@ -53,10 +65,15 @@ export function* onCheckPrayer() {
   yield takeEvery(types.CHECK_PRAYER, checkPrayerSaga);
 }
 
+export function* onDeletePrayer() {
+  yield takeEvery(types.DELETE_PRAYER, deletePrayerSaga);
+}
+
 export function* prayersSagas() {
   yield all([
     call(onGetPrayers),
     call(onPostPrayer),
     call(onCheckPrayer),
+    call(onDeletePrayer),
   ]);
 }

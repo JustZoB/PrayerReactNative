@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPrayerById, getPrayerChecked, getPrayerTitle } from '../store/prayers/selectors';
 import { RootState } from '../store/store';
 import colors from '../utils/colors'
 import CheckBox from '@react-native-community/checkbox';
-import { checkPrayerStart } from '../store/prayers/actions';
+import { checkPrayerStart, deletePrayerStart } from '../store/prayers/actions';
 import { Add, PrayerIcon, User } from '../assets/svg';
+import { Swipeable } from 'react-native-gesture-handler';
 
 interface PrayerButtonProps {
   id: number;
@@ -24,34 +25,53 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress }) => {
     dispatch(checkPrayerStart({ id, checked: !isChecked }))
   }
 
-  return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => onPress()}
-    >
-      <View style={styles.textContainer}>
-        <View style={styles.stick} />
-        <CheckBox
-          value={isChecked}
-          onValueChange={checkPrayer}
-          style={styles.checkbox}
-        />
-        <Text numberOfLines={1} style={styles.text}>
-          {title}
-        </Text>
-      </View>
-      <View style={styles.iconsContainer}>
-        <View style={styles.iconContainer}>
-          <User />
-          <Text style={styles.number}>3</Text>
-        </View>
-        <View style={styles.iconContainer}>
-          <PrayerIcon />
-          <Text style={styles.number}>123</Text>
-        </View>
-      </View>
+  const deletePrayer = () => {
+    dispatch(deletePrayerStart({ id }))
+  }
 
-    </TouchableOpacity>
+  const rightActions = () => {
+    return (
+      <View style={styles.swipedRow}>
+        <Animated.View style={styles.deleteButton}>
+          <TouchableOpacity onPress={deletePrayer}>
+            <Text style={styles.deleteButtonText}>Delete</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+    );
+  };
+
+  return (
+    <Swipeable renderRightActions={rightActions}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => onPress()}
+      >
+        <View style={styles.textContainer}>
+          <View style={styles.stick} />
+          <CheckBox
+            value={isChecked}
+            onValueChange={checkPrayer}
+            style={styles.checkbox}
+          />
+          <Text numberOfLines={1} style={styles.text}>
+            {title}
+          </Text>
+        </View>
+
+        <View style={styles.iconsContainer}>
+          <View style={styles.iconContainer}>
+            <User />
+            <Text style={styles.number}>3</Text>
+          </View>
+          <View style={styles.iconContainer}>
+            <PrayerIcon />
+            <Text style={styles.number}>123</Text>
+          </View>
+        </View>
+
+      </TouchableOpacity>
+    </Swipeable>
   );
 };
 
@@ -63,8 +83,9 @@ const styles = StyleSheet.create({
     borderColor: colors.gray,
     borderStyle: 'solid',
     borderBottomWidth: 1,
-    paddingHorizontal: 5,
+    paddingHorizontal: 15,
     paddingVertical: 20,
+    backgroundColor: '#EEE',
   },
   textContainer: {
     flexDirection: 'row',
@@ -101,5 +122,22 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     color: colors.black,
     marginLeft: 5,
-  }
+  },
+  swipedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: '100%',
+  },
+  deleteButton: {
+    backgroundColor: colors.darkRed,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    height: '100%',
+  },
+  deleteButtonText: {
+    fontSize: 13,
+    lineHeight: 15,
+    color: colors.white,
+  },
 });

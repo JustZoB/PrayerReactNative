@@ -40,44 +40,47 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Form
-        onSubmit={onAddPrayer}
-        validate={prayerValidate}
-        render={({ handleSubmit, submitting, form }) => (
-          <>
-            <Field
-              name='title'
-              render={({ input, meta }) => (
-                <View style={styles.inputContainer}>
-                  <TextField
-                    value={input.value}
-                    placeholder='Add a prayer...'
-                    onTextChange={input.onChange}
-                  />
-                  {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
-                </View>
-              )}
-            />
+      <View style={styles.formContainer}>
+        <Form
+          onSubmit={onAddPrayer}
+          validate={prayerValidate}
+          render={({ handleSubmit, submitting, form }) => (
+            <>
+              <Field
+                name='title'
+                render={({ input, meta }) => (
+                  <View style={styles.inputContainer}>
+                    <TextField
+                      value={input.value}
+                      placeholder='Add a prayer...'
+                      onTextChange={input.onChange}
+                    />
+                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                  </View>
+                )}
+              />
 
-            <Button
-              title='Add prayer'
-              disabled={submitting}
-              onPress={() => {
-                handleSubmit()
-                form.reset()
-              }}
-            />
-            {prayers.error &&
-              <>
-                {prayers.error.name === "EntityNotFound"
-                  ? <Text style={styles.errorMessage}>Server error: No such user exists</Text>
-                  : <Text style={styles.errorMessage}>Server error: {prayers.error.message}</Text>
-                }
-              </>
-            }
-          </>
-        )}
-      />
+              <Button
+                title='Add prayer'
+                disabled={submitting}
+                onPress={() => {
+                  handleSubmit()
+                  form.reset()
+                }}
+              />
+              {prayers.error &&
+                <>
+                  {prayers.error.name === "EntityNotFound"
+                    ? <Text style={styles.errorMessage}>Server error: No such user exists</Text>
+                    : <Text style={styles.errorMessage}>Server error: {prayers.error.message}</Text>
+                  }
+                </>
+              }
+            </>
+          )}
+        />
+      </View>
+
 
       <View>
         {/* {prayers.isDataLoaded &&
@@ -107,8 +110,10 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     overflow: 'scroll',
-    padding: 15,
     width: '100%',
+  },
+  formContainer: {
+    padding: 15,
   },
   inputContainer: {
     marginBottom: 15,

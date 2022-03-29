@@ -135,3 +135,14 @@ export const checkPrayer = async (id: number, checked: boolean) => {
     return { error: response.data }
   }
 }
+
+export const deletePrayerApi = async (id: number) => {
+  const response = await axios.delete(`/prayers/${id}`)
+  console.log('API DELETE PRAYER', response.data)
+
+  if (response.data) {
+    return response.data
+  } else {
+    return { error: response.data }
+  }
+}
