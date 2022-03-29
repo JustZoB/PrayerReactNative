@@ -23,12 +23,16 @@ const columnsSlice = createSlice({
     changeIsDataLoading(state, action: PayloadAction<{ isDataLoaded: boolean, }>) {
       state.isDataLoaded = action.payload.isDataLoaded
     },
+    addColumn(state, action: PayloadAction<Columns>) {
+      state.columns.push(action.payload)
+    },
   },
 });
 
 export const {
   setColumns,
-  changeIsDataLoading
+  changeIsDataLoading,
+  addColumn,
 } = columnsSlice.actions;
 
 export default columnsSlice.reducer;

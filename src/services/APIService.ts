@@ -1,4 +1,4 @@
-import axios, { Prayer, PrayerPost, User, Comment } from "./axios"
+import axios, { Prayer, PrayerPost, User, Comment, Columns } from "./axios"
 
 export const logIn = async (email: string, password: string) => {
   const response = await axios.post<User>(`/auth/sign-in`, {
@@ -29,6 +29,24 @@ export const columns = async () => {
   const response = await axios.get<User>(`/columns`)
   if (response.data) {
     return { columns: response.data }
+  } else {
+    return { error: response.data }
+  }
+}
+
+export const postColumn = async (title: string) => {
+  const response = await axios.post<Columns>(`/columns`, {
+    title,
+  })
+  console.log('API POST COLUMN', response.data)
+
+  if (response.data) {
+    return {
+      id: response.data.id,
+      title: response.data.title,
+      description: response.data.description,
+      userId: response.data.userId,
+    }
   } else {
     return { error: response.data }
   }
