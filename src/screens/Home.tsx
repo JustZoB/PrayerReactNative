@@ -1,33 +1,34 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react'
-import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppLoader } from '../components/AppLoader';
 import { Button } from '../components/Button';
 import { getColumnsStart } from '../store/columns/actions';
 import { RootState } from '../store/store';
-import { logOut } from '../store/userLogin/reducers';
 import { ColumnButton } from '../components/ColumnButton';
 import { DeskStackParams } from '../navigators/DeskStackNavigator';
+import { Settings } from '../assets/svg';
 
-export const Home: React.FC = () => {
+export const Home: React.FC = ({ }) => {
   const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
-  const auth = useSelector((state: RootState) => state.userLoginSlice);
   const columnsList = useSelector((state: RootState) => state.columnsSlice);
   const dispatch = useDispatch();
-  const DeskStack = createNativeStackNavigator();
 
   React.useEffect(() => {
     dispatch(getColumnsStart())
-  }, [])
+    navigation.setOptions({
+      headerRight: () => (
+        <Settings onPress={() => {
+          navigation.navigate('Settings')
+        }} />
+      )
+    })
+  }, [navigation])
 
-  const onLogOut = () => {
-    AsyncStorage.removeItem('userToken')
-    AsyncStorage.removeItem('userName')
-    AsyncStorage.removeItem('userEmail')
-    dispatch(logOut())
+  const onAddColumn = () => {
+    console.log('add column')
   }
 
   return (
@@ -35,7 +36,7 @@ export const Home: React.FC = () => {
       {columnsList.isDataLoaded &&
         <AppLoader />
       }
-      <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container}>
         <View>
           {columnsList.columns &&
             <>
@@ -52,10 +53,10 @@ export const Home: React.FC = () => {
           }
         </View>
         <Button
-          title='Log out'
-          onPress={onLogOut}
+          title='Add Column'
+          onPress={onAddColumn}
         />
-      </SafeAreaView>
+      </ScrollView>
     </>
   );
 };

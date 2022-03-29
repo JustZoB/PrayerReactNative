@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, Form } from 'react-final-form';
-import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppLoader } from '../components/AppLoader';
 import { Button } from '../components/Button';
@@ -39,7 +39,7 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
   }, [])
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <Form
         onSubmit={onAddPrayer}
         validate={prayerValidate}
@@ -100,7 +100,7 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
           </>
         }
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

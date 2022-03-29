@@ -1,13 +1,13 @@
 import React from 'react'
-import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View, ScrollView } from 'react-native';
 
 export const SubscribedPrayers: React.FC = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View>
         <Text>SubscribedPrayers</Text>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

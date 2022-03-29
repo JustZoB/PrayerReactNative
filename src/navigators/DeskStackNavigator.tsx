@@ -5,10 +5,12 @@ import { Home } from "../screens/Home";
 import { ColumnTabNavigator } from "./ColumnTabNavigator";
 import { Prayer } from "../screens/Prayer";
 import colors from '../utils/colors'
+import { Settings } from "../screens/Settings";
 
 export type DeskStackParams = {
   Home;
   Prayer;
+  Settings;
   ColumnTabNavigator: { id: number };
 }
 
@@ -40,6 +42,11 @@ export const DeskStackNavigator: React.FC = () => {
             fontSize: 17,
           },
         }}
+      />
+      <DeskStack.Screen
+        name="Settings"
+        component={Settings}
+        options={{ title: 'Settings' }}
       />
     </DeskStack.Navigator>
   );

@@ -1,7 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react'
 import { Field, Form } from 'react-final-form';
-import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Text, ScrollView, StatusBar } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { Message } from '../assets/svg';
 import { Button } from '../components/Button';
 import { Comments } from '../components/Prayer/Comments';
 import { CountBlocks } from '../components/Prayer/CountBlocks';
@@ -9,17 +12,20 @@ import { LastPrayed } from '../components/Prayer/LastPrayed';
 import { Members } from '../components/Prayer/Members';
 import { Title } from '../components/Prayer/Title';
 import { TextField } from '../components/TextField';
+import { DeskStackParams } from '../navigators/DeskStackNavigator';
 import { PrayerRouteType } from '../services/navigationProps';
 import { addCommentStart } from '../store/comments/actions';
 import { RootState } from '../store/store';
 import colors from '../utils/colors';
 import { commentValidate } from '../utils/validate';
+import { Pray } from '../assets/svg'
 
 interface PrayerProps {
   route: PrayerRouteType;
 }
 
 export const Prayer: React.FC<PrayerProps> = ({ route }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const comments = useSelector((state: RootState) => state.commentsSlice);
   const dispatch = useDispatch();
 
@@ -30,12 +36,20 @@ export const Prayer: React.FC<PrayerProps> = ({ route }) => {
     }))
   }
 
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pray />
+      )
+    })
+  }, [navigation])
+
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View>
         <Title id={route.params.id} />
         <LastPrayed />
-        {/* <CountBlocks /> */}
+        <CountBlocks />
         <Members />
         <Comments id={route.params.id} />
         <Form
@@ -57,8 +71,8 @@ export const Prayer: React.FC<PrayerProps> = ({ route }) => {
                 )}
               />
 
-              <Button
-                title='Add comment'
+              <Message
+                style={styles.commentIcon}
                 disabled={submitting}
                 onPress={() => {
                   handleSubmit()
@@ -77,14 +91,13 @@ export const Prayer: React.FC<PrayerProps> = ({ route }) => {
           )}
         />
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
   },
   inputContainer: {
     marginBottom: 15,
@@ -101,5 +114,9 @@ const styles = StyleSheet.create({
     right: 10,
     fontSize: 16,
     color: colors.red,
+  },
+  commentIcon: {
+    marginTop: -50,
+    marginLeft: 10,
   },
 });

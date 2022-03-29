@@ -12,20 +12,20 @@ interface TitleProps {
 export const Title: React.FC<TitleProps> = ({ id }) => {
   const title = useSelector((state: RootState) => getPrayerTitle(state.prayersSlice, id));
   return (
-    <View style={styles.subtitleContainer}>
-      <Text style={styles.subtitle}>{title}</Text>
+    <View style={styles.titleContainer}>
+      <Text style={styles.title}>{title}</Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  subtitleContainer: {
+  titleContainer: {
     paddingHorizontal: 15,
     paddingTop: 0,
     paddingBottom: 23,
     backgroundColor: colors.beige,
   },
-  subtitle: {
+  title: {
     fontSize: 17,
     lineHeight: 27,
     color: colors.white,

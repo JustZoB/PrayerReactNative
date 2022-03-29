@@ -5,8 +5,10 @@ import { SubscribedPrayers } from "../screens/SubscribedPrayers";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { getColumnTitle } from "../store/columns/selectors";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import { DeskStackParams } from "./DeskStackNavigator";
+import { Settings } from "../assets/svg";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<DeskStackParams, 'ColumnTabNavigator'>;
 
@@ -19,8 +21,17 @@ const Tab = createMaterialTopTabNavigator<ColumnTabParams>();
 
 export const ColumnTabNavigator: React.FC<Props> = ({ route, navigation }) => {
   // const columnsList = useSelector((state: RootState) => state.columnsSlice);
+  const stackNavigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const title = useSelector((state: RootState) => getColumnTitle(state.columnsSlice, route.params.id));
   console.log('TITLE', title)
+
+  stackNavigation.setOptions({
+    headerRight: () => (
+      <Settings onPress={() => {
+        navigation.navigate('Settings')
+      }} />
+    )
+  })
 
   useEffect(() => {
     navigation.setOptions({

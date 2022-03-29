@@ -27,9 +27,6 @@ const SvgCirclePlus = (props: SvgProps) => (
       strokeWidth={1.5}
       d="M16 6.5303L16 26.42311"
     />
-    <G mask="url(#CirclePlus_svg__a)">
-      <Path fill="#fff" d="M7.273 7.273h17.454v17.454H7.273z" />
-    </G>
   </Svg>
 );
 
