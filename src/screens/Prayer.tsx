@@ -62,6 +62,8 @@ export const Prayer: React.FC<PrayerProps> = ({ route }) => {
                 render={({ input, meta }) => (
                   <View style={styles.inputContainer}>
                     <TextField
+                      paddingLeft={48}
+                      borderRadius={0}
                       value={input.value}
                       placeholder='Add a comment...'
                       onTextChange={input.onChange}
@@ -90,6 +92,7 @@ export const Prayer: React.FC<PrayerProps> = ({ route }) => {
             </>
           )}
         />
+        <View style={styles.blank} />
       </View>
     </ScrollView>
   );
@@ -116,7 +119,10 @@ const styles = StyleSheet.create({
     color: colors.red,
   },
   commentIcon: {
-    marginTop: -50,
-    marginLeft: 10,
+    marginTop: -48,
+    marginLeft: 15,
   },
+  blank: {
+    height: 20,
+  }
 });

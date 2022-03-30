@@ -9,7 +9,7 @@ import { addColumnStart, getColumnsStart } from '../store/columns/actions';
 import { RootState } from '../store/store';
 import { ColumnButton } from '../components/ColumnButton';
 import { DeskStackParams } from '../navigators/DeskStackNavigator';
-import { Settings } from '../assets/svg';
+import { Add, Settings } from '../assets/svg';
 import { Field, Form } from 'react-final-form';
 import colors from '../utils/colors';
 import { TextField } from '../components/TextField';
@@ -43,21 +43,6 @@ export const Home: React.FC = ({ }) => {
         <AppLoader />
       }
       <ScrollView style={styles.container}>
-        <View>
-          {columnsList.columns &&
-            <>
-              {columnsList.columns.map(({ id }) => (
-                <ColumnButton
-                  key={id}
-                  id={id}
-                  onPress={() => {
-                    navigation.navigate('ColumnTabNavigator', { id })
-                  }}
-                />
-              ))}
-            </>
-          }
-        </View>
         <Form
           onSubmit={onAddColumn}
           validate={columnValidate}
@@ -69,6 +54,7 @@ export const Home: React.FC = ({ }) => {
                   <View style={styles.inputContainer}>
                     <TextField
                       value={input.value}
+                      paddingLeft={48}
                       placeholder='Add a column...'
                       onTextChange={input.onChange}
                     />
@@ -77,8 +63,8 @@ export const Home: React.FC = ({ }) => {
                 )}
               />
 
-              <Button
-                title='Add Column'
+              <Add
+                style={styles.commentIcon}
                 disabled={submitting}
                 onPress={() => {
                   handleSubmit()
@@ -96,6 +82,21 @@ export const Home: React.FC = ({ }) => {
             </>
           )}
         />
+        <View>
+          {columnsList.columns &&
+            <>
+              {columnsList.columns.map(({ id }) => (
+                <ColumnButton
+                  key={id}
+                  id={id}
+                  onPress={() => {
+                    navigation.navigate('ColumnTabNavigator', { id })
+                  }}
+                />
+              ))}
+            </>
+          }
+        </View>
       </ScrollView>
     </>
   );
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputContainer: {
-    marginBottom: 15,
+    marginBottom: 10,
   },
   errorMessage: {
     fontSize: 16,
@@ -128,5 +129,10 @@ const styles = StyleSheet.create({
     right: 10,
     fontSize: 16,
     color: colors.red,
+  },
+  commentIcon: {
+    position: 'absolute',
+    top: 14,
+    left: 14,
   },
 });

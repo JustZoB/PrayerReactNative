@@ -60,7 +60,6 @@ export const getDateString = (
   date: string
 ): string => {
   const now = new Date
-  console.log(now.valueOf(), ' - ', Date.parse(date).valueOf())
   const subDate = now.valueOf() - Date.parse(date).valueOf();
   let stringDate = ''
 

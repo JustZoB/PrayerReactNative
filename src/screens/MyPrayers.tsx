@@ -15,6 +15,7 @@ import colors from '../utils/colors'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DeskStackParams } from '../navigators/DeskStackNavigator';
+import { Add } from '../assets/svg';
 
 interface ColumnProps {
   route: ColumnRouteType;
@@ -49,9 +50,10 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
               <Field
                 name='title'
                 render={({ input, meta }) => (
-                  <View style={styles.inputContainer}>
+                  <View>
                     <TextField
                       value={input.value}
+                      paddingLeft={48}
                       placeholder='Add a prayer...'
                       onTextChange={input.onChange}
                     />
@@ -60,8 +62,8 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
                 )}
               />
 
-              <Button
-                title='Add prayer'
+              <Add
+                style={styles.commentIcon}
                 disabled={submitting}
                 onPress={() => {
                   handleSubmit()
@@ -115,9 +117,6 @@ const styles = StyleSheet.create({
   formContainer: {
     padding: 15,
   },
-  inputContainer: {
-    marginBottom: 15,
-  },
   errorMessage: {
     fontSize: 16,
     textAlign: 'center',
@@ -130,5 +129,10 @@ const styles = StyleSheet.create({
     right: 10,
     fontSize: 16,
     color: colors.red,
+  },
+  commentIcon: {
+    position: 'absolute',
+    top: 28,
+    left: 28,
   },
 });

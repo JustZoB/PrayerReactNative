@@ -7,10 +7,12 @@ interface TextFieldProps {
   placeholder: string;
   isSecure?: boolean;
   value?: string;
+  paddingLeft?: number;
+  borderRadius?: number;
   onTextChange: Function;
 }
 
-export const TextField: React.FC<TextFieldProps> = ({ placeholder, isSecure = false, onTextChange, value }) => {
+export const TextField: React.FC<TextFieldProps> = ({ placeholder, isSecure = false, onTextChange, value, paddingLeft, borderRadius }) => {
   const [isPassword, setIsPassword] = useState<boolean>(false)
 
   useEffect(() => {
@@ -24,7 +26,7 @@ export const TextField: React.FC<TextFieldProps> = ({ placeholder, isSecure = fa
         value={value}
         secureTextEntry={isPassword}
         onChangeText={(text) => onTextChange(text)}
-        style={styles.textField}
+        style={propsStyles({ paddingLeft, borderRadius }).textField}
         maxLength={256}
       />
       {isSecure &&
@@ -41,18 +43,23 @@ export const TextField: React.FC<TextFieldProps> = ({ placeholder, isSecure = fa
   )
 }
 
+const propsStyles = ({ paddingLeft, borderRadius }) =>
+  StyleSheet.create({
+    textField: {
+      borderWidth: 1,
+      borderColor: colors.gray,
+      borderStyle: 'solid',
+      borderRadius: borderRadius !== undefined ? borderRadius : 10,
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      fontSize: 17,
+      lineHeight: 20,
+      width: '100%',
+      paddingLeft: paddingLeft,
+    },
+  })
+
 const styles = StyleSheet.create({
-  textField: {
-    borderWidth: 1,
-    borderColor: colors.gray,
-    borderStyle: 'solid',
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    fontSize: 17,
-    lineHeight: 20,
-    width: '100%',
-  },
   showPasswordBlock: {
     alignItems: 'center',
     flexDirection: 'row',
