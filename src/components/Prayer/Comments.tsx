@@ -1,10 +1,11 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getCommentsStart } from "../../store/comments/actions";
-import { getCommentBody, getCommentsByPrayerId } from "../../store/comments/selectors";
-import { RootState } from "../../store/store";
+
 import colors from '../../utils/colors'
+import { RootState } from "../../store/store";
+import { getCommentsStart } from "../../store/comments/actions";
+import { getCommentsByPrayerId } from "../../store/comments/selectors";
 import { Comment } from './Comment'
 
 interface CommentsProps {

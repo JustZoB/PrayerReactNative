@@ -1,37 +1,37 @@
 import React, { useState } from 'react'
 import { Field, Form } from 'react-final-form';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppLoader } from '../components/AppLoader';
-import { Button } from '../components/Button';
-import { PrayerButton } from '../components/PrayerButton';
-import { TextField } from '../components/TextField';
-import { ColumnRouteType } from '../services/navigationProps';
-import { addPrayerStart, getPrayersStart } from '../store/prayers/actions';
-import { getPrayersByColumnId, getPrayersChecked, getPrayersUnChecked } from '../store/prayers/selectors';
-import { RootState } from '../store/store';
-import { prayerValidate } from '../utils/validate';
-import colors from '../utils/colors'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 import { DeskStackParams } from '../navigators/DeskStackNavigator';
+import { prayerValidate } from '../utils/validate';
+import { ColumnRouteType } from '../services/navigationProps';
+import { RootState } from '../store/store';
+import { addPrayerStart, getPrayersStart } from '../store/prayers/actions';
+import { getPrayersByColumnId, getPrayersChecked, getPrayersUnChecked } from '../store/prayers/selectors';
 import { Add } from '../assets/svg';
+import { PrayerButton } from '../components/PrayerButton';
+import { TextField } from '../components/TextField';
 import { RoundButton } from '../components/RoundButton';
+import { ErrorMessage } from '../components/ErrorMessage';
+import { TextFieldError } from '../components/TextFieldError';
 
 interface ColumnProps {
   route: ColumnRouteType;
 }
 
 export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
-  const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const dispatch = useDispatch();
+  const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const prayers = useSelector((state: RootState) => state.prayersSlice);
   const [answeredButton, setAnsweredButton] = useState<string>('Show answered prayers')
   const [isAnsweredPrayersShown, setIsAnsweredPrayersShown] = useState<boolean>(false)
-
   const thisPrayers = useSelector((state: RootState) => getPrayersByColumnId(state.prayersSlice, route.params.id));
   const checkedPrayers = useSelector(() => getPrayersChecked(thisPrayers));
   const unCheckedPrayers = useSelector(() => getPrayersUnChecked(thisPrayers));
+
   const onAddPrayer = (values: { title: string }) => {
     dispatch(addPrayerStart({
       title: values.title,
@@ -71,7 +71,7 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
                       placeholder='Add a prayer...'
                       onTextChange={input.onChange}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
@@ -85,12 +85,7 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
                 }}
               />
               {prayers.error &&
-                <>
-                  {prayers.error.name === "EntityNotFound"
-                    ? <Text style={styles.errorMessage}>Server error: No such user exists</Text>
-                    : <Text style={styles.errorMessage}>Server error: {prayers.error.message}</Text>
-                  }
-                </>
+                <ErrorMessage text={prayers.error.message} />
               }
             </>
           )}
@@ -99,12 +94,6 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
 
 
       <View>
-        {/* {prayers.isDataLoaded &&
-          <AppLoader />
-        } ? {
-          <>
-          </>
-        } */}
         {unCheckedPrayers &&
           <>
             {unCheckedPrayers.map(({ id }) => (
@@ -148,19 +137,6 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     padding: 15,
-  },
-  errorMessage: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: colors.red,
-    marginTop: 10,
-  },
-  textFieldError: {
-    position: 'absolute',
-    top: 13,
-    right: 10,
-    fontSize: 16,
-    color: colors.red,
   },
   commentIcon: {
     position: 'absolute',

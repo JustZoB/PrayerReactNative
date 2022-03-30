@@ -2,32 +2,32 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react'
 import { Field, Form } from 'react-final-form';
-import { StyleSheet, SafeAreaView, View, Text, ScrollView, StatusBar } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Message } from '../assets/svg';
-import { Button } from '../components/Button';
+
+import { DeskStackParams } from '../navigators/DeskStackNavigator';
+import { commentValidate } from '../utils/validate';
+import { PrayerRouteType } from '../services/navigationProps';
+import { RootState } from '../store/store';
+import { addCommentStart } from '../store/comments/actions';
+import { Pray, Message } from '../assets/svg'
 import { Comments } from '../components/Prayer/Comments';
 import { CountBlocks } from '../components/Prayer/CountBlocks';
 import { LastPrayed } from '../components/Prayer/LastPrayed';
 import { Members } from '../components/Prayer/Members';
 import { Title } from '../components/Prayer/Title';
 import { TextField } from '../components/TextField';
-import { DeskStackParams } from '../navigators/DeskStackNavigator';
-import { PrayerRouteType } from '../services/navigationProps';
-import { addCommentStart } from '../store/comments/actions';
-import { RootState } from '../store/store';
-import colors from '../utils/colors';
-import { commentValidate } from '../utils/validate';
-import { Pray } from '../assets/svg'
+import { ErrorMessage } from '../components/ErrorMessage';
+import { TextFieldError } from '../components/TextFieldError';
 
 interface PrayerProps {
   route: PrayerRouteType;
 }
 
 export const Prayer: React.FC<PrayerProps> = ({ route }) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const comments = useSelector((state: RootState) => state.commentsSlice);
-  const dispatch = useDispatch();
 
   const onAddComment = (values: { body: string }) => {
     dispatch(addCommentStart({
@@ -68,7 +68,7 @@ export const Prayer: React.FC<PrayerProps> = ({ route }) => {
                       placeholder='Add a comment...'
                       onTextChange={input.onChange}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
@@ -82,12 +82,7 @@ export const Prayer: React.FC<PrayerProps> = ({ route }) => {
                 }}
               />
               {comments.error &&
-                <>
-                  {comments.error.name === "EntityNotFound"
-                    ? <Text style={styles.errorMessage}>Server error: No such user exists</Text>
-                    : <Text style={styles.errorMessage}>Server error: {comments.error.message}</Text>
-                  }
-                </>
+                <ErrorMessage text={comments.error.message} />
               }
             </>
           )}
@@ -104,19 +99,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 15,
-  },
-  errorMessage: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: colors.red,
-    marginTop: 10,
-  },
-  textFieldError: {
-    position: 'absolute',
-    top: 13,
-    right: 10,
-    fontSize: 16,
-    color: colors.red,
   },
   commentIcon: {
     marginTop: -48,

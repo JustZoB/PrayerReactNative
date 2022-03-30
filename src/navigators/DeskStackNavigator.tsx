@@ -1,11 +1,11 @@
 import React from "react"
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { Home } from "../screens/Home";
-import { ColumnTabNavigator } from "./ColumnTabNavigator";
-import { Prayer } from "../screens/Prayer";
 import colors from '../utils/colors'
+import { Home } from "../screens/Home";
+import { Prayer } from "../screens/Prayer";
 import { Settings } from "../screens/Settings";
+import { ColumnTabNavigator } from "./ColumnTabNavigator";
 
 export type DeskStackParams = {
   Home;

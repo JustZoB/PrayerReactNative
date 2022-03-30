@@ -1,14 +1,15 @@
 import React, { useEffect } from "react"
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { MyPrayers } from "../screens/MyPrayers";
-import { SubscribedPrayers } from "../screens/SubscribedPrayers";
 import { useSelector } from "react-redux";
+import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+
 import { RootState } from "../store/store";
 import { getColumnTitle } from "../store/columns/selectors";
-import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
+import { MyPrayers } from "../screens/MyPrayers";
+import { SubscribedPrayers } from "../screens/SubscribedPrayers";
 import { DeskStackParams } from "./DeskStackNavigator";
 import { Settings } from "../assets/svg";
-import { useNavigation } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<DeskStackParams, 'ColumnTabNavigator'>;
 
@@ -20,7 +21,6 @@ export type ColumnTabParams = {
 const Tab = createMaterialTopTabNavigator<ColumnTabParams>();
 
 export const ColumnTabNavigator: React.FC<Props> = ({ route, navigation }) => {
-  // const columnsList = useSelector((state: RootState) => state.columnsSlice);
   const stackNavigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const title = useSelector((state: RootState) => getColumnTitle(state.columnsSlice, route.params.id));
   console.log('TITLE', title)
@@ -30,7 +30,7 @@ export const ColumnTabNavigator: React.FC<Props> = ({ route, navigation }) => {
       <Settings onPress={() => {
         navigation.navigate('Settings')
       }} />
-    )
+    ),
   })
 
   useEffect(() => {

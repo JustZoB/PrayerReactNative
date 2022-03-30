@@ -1,9 +1,10 @@
 import React from "react";
 import { Text, StyleSheet, View, Image } from "react-native";
 import { useSelector } from "react-redux";
-import { getCommentBody, getCommentDate, getCommentUser, getDateString } from "../../store/comments/selectors";
-import { RootState } from "../../store/store";
+
 import colors from '../../utils/colors'
+import { RootState } from "../../store/store";
+import { getCommentBody, getCommentDate, getCommentUser, getDateString } from "../../store/comments/selectors";
 
 interface CommentsProps {
   key: number,

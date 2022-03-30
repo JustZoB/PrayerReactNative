@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, TextInput, StyleSheet, Text } from "react-native";
 import CheckBox from '@react-native-community/checkbox';
+
 import colors from '../utils/colors'
 
 interface TextFieldProps {

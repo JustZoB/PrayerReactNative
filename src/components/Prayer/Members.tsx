@@ -1,7 +1,8 @@
 import React from "react";
 import { Text, StyleSheet, View, Image } from "react-native";
-import { CirclePlus } from "../../assets/svg";
+
 import colors from '../../utils/colors'
+import { CirclePlus } from "../../assets/svg";
 
 export const Members: React.FC = () => {
   return (

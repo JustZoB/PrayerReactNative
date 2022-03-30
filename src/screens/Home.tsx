@@ -1,24 +1,25 @@
+import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react'
-import { StyleSheet, View, ScrollView, Text } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppLoader } from '../components/AppLoader';
-import { Button } from '../components/Button';
-import { addColumnStart, getColumnsStart } from '../store/columns/actions';
-import { RootState } from '../store/store';
-import { ColumnButton } from '../components/ColumnButton';
-import { DeskStackParams } from '../navigators/DeskStackNavigator';
-import { Add, Settings } from '../assets/svg';
 import { Field, Form } from 'react-final-form';
-import colors from '../utils/colors';
-import { TextField } from '../components/TextField';
+
+import { DeskStackParams } from '../navigators/DeskStackNavigator';
 import { columnValidate } from '../utils/validate';
+import { RootState } from '../store/store';
+import { addColumnStart, getColumnsStart } from '../store/columns/actions';
+import { Add, Settings } from '../assets/svg';
+import { AppLoader } from '../components/AppLoader';
+import { ColumnButton } from '../components/ColumnButton';
+import { TextField } from '../components/TextField';
+import { ErrorMessage } from '../components/ErrorMessage';
+import { TextFieldError } from '../components/TextFieldError';
 
 export const Home: React.FC = ({ }) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const columnsList = useSelector((state: RootState) => state.columnsSlice);
-  const dispatch = useDispatch();
 
   React.useEffect(() => {
     dispatch(getColumnsStart())
@@ -58,7 +59,7 @@ export const Home: React.FC = ({ }) => {
                       placeholder='Add a column...'
                       onTextChange={input.onChange}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
@@ -72,12 +73,7 @@ export const Home: React.FC = ({ }) => {
                 }}
               />
               {columnsList.error &&
-                <>
-                  {columnsList.error.name === "EntityNotFound"
-                    ? <Text style={styles.errorMessage}>Server error: No such user exists</Text>
-                    : <Text style={styles.errorMessage}>Server error: {columnsList.error.message}</Text>
-                  }
-                </>
+                <ErrorMessage text={columnsList.error.message} />
               }
             </>
           )}
@@ -116,19 +112,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 10,
-  },
-  errorMessage: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: colors.red,
-    marginTop: 10,
-  },
-  textFieldError: {
-    position: 'absolute',
-    top: 13,
-    right: 10,
-    fontSize: 16,
-    color: colors.red,
   },
   commentIcon: {
     position: 'absolute',

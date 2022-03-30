@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
+
 import colors from '../../utils/colors'
 
 export const CountBlocks: React.FC = () => {

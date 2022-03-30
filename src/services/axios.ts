@@ -33,7 +33,7 @@ export interface User {
   token: string,
 }
 
-export interface Columns {
+export interface Column {
   id: number,
   title: string,
   description: string,

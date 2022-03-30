@@ -1,13 +1,14 @@
 import React from 'react'
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPrayerById, getPrayerChecked, getPrayerTitle } from '../store/prayers/selectors';
-import { RootState } from '../store/store';
-import colors from '../utils/colors'
 import CheckBox from '@react-native-community/checkbox';
+import { Swipeable } from 'react-native-gesture-handler';
+
+import colors from '../utils/colors'
+import { RootState } from '../store/store';
+import { getPrayerChecked, getPrayerTitle } from '../store/prayers/selectors';
 import { checkPrayerStart, deletePrayerStart } from '../store/prayers/actions';
 import { PrayerIcon } from '../assets/svg';
-import { Swipeable } from 'react-native-gesture-handler';
 import { UserIcon } from './Prayer/UserIcon';
 
 interface PrayerButtonProps {
@@ -18,10 +19,8 @@ interface PrayerButtonProps {
 
 export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress, textDecoration }) => {
   const dispatch = useDispatch();
-  const prayersList = useSelector((state: RootState) => state.prayersSlice);
   const title = useSelector((state: RootState) => getPrayerTitle(state.prayersSlice, id));
   const isChecked = useSelector((state: RootState) => getPrayerChecked(state.prayersSlice, id));
-  const prayer = (useSelector((state: RootState) => getPrayerById(state.prayersSlice, id)));
 
   const checkPrayer = () => {
     dispatch(checkPrayerStart({ id, checked: !isChecked }))
@@ -53,6 +52,8 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress, textDec
           <View style={styles.stick} />
           <CheckBox
             value={isChecked}
+            onFillColor={colors.black}
+            onCheckColor={colors.white}
             onValueChange={checkPrayer}
             style={styles.checkbox}
           />

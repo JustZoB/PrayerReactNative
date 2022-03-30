@@ -1,16 +1,15 @@
-import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeEvery } from 'redux-saga/effects';
 import types from './types';
 
 import { logInSuccess, registerSuccess, logInFailure, registerFailure, changeLoading, changeIsDataLoading, setToken } from './reducers';
 import { getTokenAsyncStorage, setItem } from '../../services/asyncStorage';
-import { logIn, register } from '../../services/APIService';
 import { setAccessToken } from '../../services/axios';
+import { logIn, register } from './APIServices';
 
 export function* logInSaga({ payload: { email, password } }) {
   yield put(changeLoading({ loading: true }))
   try {
     const response = yield logIn(email, password)
-    console.log(response)
     if (response.user) {
       yield put(logInSuccess(response))
       setItem('userToken', response.user.token)
@@ -30,7 +29,6 @@ export function* registerSaga({ payload: { email, name, password } }) {
   yield put(changeLoading({ loading: true }))
   try {
     const response = yield register(email, name, password)
-    console.log(response)
     if (response.user) {
       yield put(registerSuccess(response))
       setItem('userToken', response.user.token)
@@ -50,12 +48,11 @@ export function* getTokenSaga() {
   yield put(changeIsDataLoading({ isDataLoaded: true }))
   try {
     const response = yield getTokenAsyncStorage()
-    console.log(response)
     if (response !== undefined) {
       yield put(setToken(response))
       setAccessToken(response.token)
     } else {
-      console.log('saga error UNDEFINED', response)
+      console.log('saga error', response)
     }
   } catch (error) {
     console.log('saga error', error)

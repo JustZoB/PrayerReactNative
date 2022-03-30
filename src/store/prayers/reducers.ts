@@ -18,7 +18,6 @@ const prayersSlice = createSlice({
   initialState,
   reducers: {
     setPrayers(state, action: PayloadAction<{ prayers: Prayer[], }>) {
-      console.log('SET PRAYER REDUCER', action.payload.prayers)
       state.prayers = action.payload.prayers
     },
     changeIsDataLoading(state, action: PayloadAction<{ isDataLoaded: boolean, }>) {
@@ -33,7 +32,7 @@ const prayersSlice = createSlice({
         prayer.checked = !prayer.checked
       }
     },
-    deletePrayer(state, action: PayloadAction<Prayer>) {
+    removePrayer(state, action: PayloadAction<Prayer>) {
       state.prayers = state.prayers.filter(prayer => prayer.id !== action.payload.id)
     },
   },
@@ -44,7 +43,7 @@ export const {
   changeIsDataLoading,
   addPrayer,
   updatePrayer,
-  deletePrayer,
+  removePrayer,
 } = prayersSlice.actions;
 
 export default prayersSlice.reducer;

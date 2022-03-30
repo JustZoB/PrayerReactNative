@@ -1,23 +1,25 @@
+import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react'
 import { Form, Field } from 'react-final-form'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { AuthStackParams } from '../navigators/AuthStackNavigator';
 import colors from '../utils/colors'
-
-import { useSelector, useDispatch } from 'react-redux';
+import { loginValidate } from '../utils/validate';
+import { RootState } from '../store/store';
+import { logInStart } from '../store/userLogin/action';
+import { clearLogInErrors } from '../store/userLogin/reducers';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
-import { logInStart } from '../store/userLogin/action';
-import { RootState } from '../store/store';
-import { clearLogInErrors } from '../store/userLogin/reducers';
 import { AppLoader } from '../components/AppLoader';
-import { loginValidate } from '../utils/validate';
+import { ErrorMessage } from '../components/ErrorMessage';
+import { TextFieldError } from '../components/TextFieldError';
 
 export const Login: React.FC = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
-  const dispatch = useDispatch()
   const auth = useSelector((state: RootState) => state.userLoginSlice);
 
   const navigateToSignUp = () => {
@@ -54,7 +56,7 @@ export const Login: React.FC = () => {
                       placeholder='E-mail'
                       onTextChange={input.onChange}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
@@ -69,7 +71,7 @@ export const Login: React.FC = () => {
                       onTextChange={input.onChange}
                       isSecure={true}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
@@ -82,8 +84,8 @@ export const Login: React.FC = () => {
               {auth.error &&
                 <>
                   {auth.error.name === "EntityNotFound"
-                    ? <Text style={styles.errorMessage}>Server error: No such user exists</Text>
-                    : <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+                    ? <ErrorMessage text={'No such user exists'} />
+                    : <ErrorMessage text={auth.error.message} />
                   }
                 </>
               }
@@ -137,18 +139,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.lightBlue,
     paddingLeft: 5,
-  },
-  errorMessage: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: colors.red,
-    marginTop: 10,
-  },
-  textFieldError: {
-    position: 'absolute',
-    top: 13,
-    right: 10,
-    fontSize: 16,
-    color: colors.red,
   },
 });

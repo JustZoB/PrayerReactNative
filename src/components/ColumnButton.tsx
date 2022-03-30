@@ -1,9 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
-import { getColumnTitle } from '../store/columns/selectors';
-import { RootState } from '../store/store';
+
 import colors from '../utils/colors'
+import { RootState } from '../store/store';
+import { getColumnTitle } from '../store/columns/selectors';
 
 interface ColumnProps {
   id: number;

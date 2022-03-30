@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Columns } from '../../services/axios';
+import { Column } from '../../services/axios';
 
 type ColumnsState = {
-  columns: Columns[] | undefined
+  columns: Column[] | undefined
   isDataLoaded: boolean
   error: Error | undefined
 }
 
 const initialState: ColumnsState = {
-  columns: undefined as Columns[],
+  columns: undefined as Column[],
   isDataLoaded: false,
   error: undefined
 }
@@ -17,13 +17,13 @@ const columnsSlice = createSlice({
   name: 'columnsSlice',
   initialState,
   reducers: {
-    setColumns(state, action: PayloadAction<{ columns: Columns[], }>) {
+    setColumns(state, action: PayloadAction<{ columns: Column[], }>) {
       state.columns = action.payload.columns
     },
     changeIsDataLoading(state, action: PayloadAction<{ isDataLoaded: boolean, }>) {
       state.isDataLoaded = action.payload.isDataLoaded
     },
-    addColumn(state, action: PayloadAction<Columns>) {
+    addColumn(state, action: PayloadAction<Column>) {
       state.columns.push(action.payload)
     },
   },

@@ -1,12 +1,12 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { columns, postColumn } from '../../services/APIService';
+import { getColumns, postColumn } from './APIService';
 import { addColumn, changeIsDataLoading, setColumns } from './reducers';
 import types from './types';
 
 export function* getColumnsSaga() {
   yield put(changeIsDataLoading({ isDataLoaded: true }))
   try {
-    const response = yield columns()
+    const response = yield getColumns()
     yield put(setColumns(response))
   } catch (error) {
     console.log('SAGA ERROR', error)
@@ -18,7 +18,6 @@ export function* postColumnSaga({ payload: { title } }) {
   yield put(changeIsDataLoading({ isDataLoaded: true }))
   try {
     const response = yield postColumn(title)
-    console.log('SAGA POST COLUMN', response)
     yield put(addColumn(response))
   } catch (error) {
     console.log('SAGA POST COLUMN ERROR', error)

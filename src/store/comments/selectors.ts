@@ -1,5 +1,3 @@
-// export const getDataList = (state: { column: { dataList: ColumnType[] } }) => state.column.dataList
-
 import { Comment } from "../../services/axios"
 
 export const getCommentBody = (

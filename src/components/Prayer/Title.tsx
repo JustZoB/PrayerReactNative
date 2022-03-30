@@ -1,9 +1,10 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
+
+import colors from '../../utils/colors'
 import { getPrayerTitle } from "../../store/prayers/selectors";
 import { RootState } from "../../store/store";
-import colors from '../../utils/colors'
 
 interface TitleProps {
   id: number;
@@ -11,6 +12,7 @@ interface TitleProps {
 
 export const Title: React.FC<TitleProps> = ({ id }) => {
   const title = useSelector((state: RootState) => getPrayerTitle(state.prayersSlice, id));
+
   return (
     <View style={styles.titleContainer}>
       <Text style={styles.title}>{title}</Text>

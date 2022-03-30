@@ -1,22 +1,25 @@
+import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useState } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { AuthStackParams } from '../navigators/AuthStackNavigator';
-import { TextField } from '../components/TextField';
-import { Button } from '../components/Button';
 import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerStart } from '../store/userLogin/action';
+
+import { singUpValidate } from '../utils/validate';
+import colors from '../utils/colors'
 import { RootState } from '../store/store';
 import { clearLogInErrors } from '../store/userLogin/reducers';
-import { singUpValidate } from '../utils/validate';
+import { registerStart } from '../store/userLogin/action';
+import { TextField } from '../components/TextField';
+import { Button } from '../components/Button';
 import { AppLoader } from '../components/AppLoader';
-import colors from '../utils/colors'
+import { ErrorMessage } from '../components/ErrorMessage';
+import { TextFieldError } from '../components/TextFieldError';
 
 export const SignUp: React.FC = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
-  const dispatch = useDispatch()
   const auth = useSelector((state: RootState) => state.userLoginSlice);
 
   const navigateToSignIn = () => {
@@ -53,7 +56,7 @@ export const SignUp: React.FC = () => {
                       value={input.value}
                       onTextChange={input.onChange}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
@@ -66,7 +69,7 @@ export const SignUp: React.FC = () => {
                       value={input.value}
                       onTextChange={input.onChange}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
@@ -80,7 +83,7 @@ export const SignUp: React.FC = () => {
                       onTextChange={input.onChange}
                       isSecure={true}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
@@ -92,8 +95,8 @@ export const SignUp: React.FC = () => {
               {auth.error &&
                 <>
                   {auth.error.name === "QueryFailedError"
-                    ? <Text style={styles.errorMessage}>Server error: This e-mail is already taken</Text>
-                    : <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+                    ? <ErrorMessage text={'This e-mail is already taken'} />
+                    : <ErrorMessage text={auth.error.message} />
                   }
                 </>
               }
@@ -151,18 +154,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.lightBlue,
     paddingLeft: 5,
-  },
-  errorMessage: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: colors.red,
-    marginTop: 10,
-  },
-  textFieldError: {
-    position: 'absolute',
-    top: 13,
-    right: 10,
-    fontSize: 16,
-    color: colors.red,
   },
 });

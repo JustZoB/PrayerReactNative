@@ -1,9 +1,7 @@
-// export const getDataList = (state: { column: { dataList: ColumnType[] } }) => state.column.dataList
-
-import { Columns } from "../../services/axios"
+import { Column } from "../../services/axios"
 
 export const getColumnTitle = (
-  state: { columns: Columns[] },
+  state: { columns: Column[] },
   id: number
 ): string => {
   return state.columns.filter(column => {

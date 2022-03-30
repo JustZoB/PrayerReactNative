@@ -1,13 +1,12 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { postPrayer, prayers, checkPrayer, deletePrayerApi } from '../../services/APIService';
-import { addPrayer, changeIsDataLoading, deletePrayer, setPrayers, updatePrayer } from './reducers';
+import { postPrayer, getPrayers, checkPrayer, deletePrayer } from './APIService';
+import { addPrayer, changeIsDataLoading, removePrayer, setPrayers, updatePrayer } from './reducers';
 import types from './types';
 
 export function* getPrayersSaga() {
   yield put(changeIsDataLoading({ isDataLoaded: true }))
   try {
-    const response = yield prayers()
-    console.log('SAGA PRAYER', response)
+    const response = yield getPrayers()
     yield put(setPrayers(response))
   } catch (error) {
     console.log('SAGA ERROR', error)
@@ -19,7 +18,6 @@ export function* postPrayerSaga({ payload: { title, columnId } }) {
   yield put(changeIsDataLoading({ isDataLoaded: true }))
   try {
     const response = yield postPrayer(title, columnId)
-    console.log('SAGA POST PRAYER', response)
     yield put(addPrayer(response))
   } catch (error) {
     console.log('SAGA POST PRAYER ERROR', error)
@@ -29,10 +27,8 @@ export function* postPrayerSaga({ payload: { title, columnId } }) {
 
 export function* checkPrayerSaga({ payload: { id, checked } }) {
   yield put(changeIsDataLoading({ isDataLoaded: true }))
-  console.log('SAGA PUT PRAYER GETTING', id, checked)
   try {
     const response = yield checkPrayer(id, checked)
-    console.log('SAGA PUT PRAYER', response)
     yield put(updatePrayer(response))
   } catch (error) {
     console.log('SAGA PUT PRAYER ERROR', error)
@@ -42,11 +38,9 @@ export function* checkPrayerSaga({ payload: { id, checked } }) {
 
 export function* deletePrayerSaga({ payload: { id } }) {
   yield put(changeIsDataLoading({ isDataLoaded: true }))
-  console.log('SAGA DELETE PRAYER GETTING', id)
   try {
-    const response = yield deletePrayerApi(id)
-    console.log('SAGA DELETE PRAYER', response)
-    yield put(deletePrayer(response))
+    const response = yield deletePrayer(id)
+    yield put(removePrayer(response))
   } catch (error) {
     console.log('SAGA DELETE PRAYER ERROR', error)
   }
