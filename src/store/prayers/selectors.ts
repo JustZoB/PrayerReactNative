@@ -4,13 +4,15 @@ export const getPrayerTitle = (
   state: { prayers: Prayer[] },
   id: number
 ): string => {
-  return state.prayers.filter(prayer => {
-    if (prayer.id === id) {
-      return prayer
-    }
+  if (state.prayers !== undefined) {
+    return state.prayers.filter(prayer => {
+      if (prayer.id === id) {
+        return prayer
+      }
 
-    return undefined
-  })[0].title
+      return undefined
+    })[0].title
+  }
 }
 
 export const getPrayerById = (
@@ -43,15 +45,45 @@ export const getPrayersByColumnId = (
   }
 }
 
+export const getPrayersChecked = (
+  state: Prayer[]
+): Prayer[] => {
+  if (state !== undefined) {
+    return state.filter(prayer => {
+      if (prayer.checked) {
+        return prayer
+      }
+
+      return undefined
+    })
+  }
+}
+
+export const getPrayersUnChecked = (
+  state: Prayer[]
+): Prayer[] => {
+  if (state !== undefined) {
+    return state.filter(prayer => {
+      if (!prayer.checked) {
+        return prayer
+      }
+
+      return undefined
+    })
+  }
+}
+
 export const getPrayerChecked = (
   state: { prayers: Prayer[] },
   id: number
 ): boolean => {
-  return state.prayers.filter(prayer => {
-    if (prayer.id === id) {
-      return prayer
-    }
+  if (state.prayers !== undefined) {
+    return state.prayers.filter(prayer => {
+      if (prayer.id === id) {
+        return prayer
+      }
 
-    return undefined
-  })[0].checked
+      return undefined
+    })[0].checked
+  }
 }

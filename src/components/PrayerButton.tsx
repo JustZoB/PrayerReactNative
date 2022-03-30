@@ -13,9 +13,10 @@ import { UserIcon } from './Prayer/UserIcon';
 interface PrayerButtonProps {
   id: number;
   onPress?: Function;
+  textDecoration?: string;
 }
 
-export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress }) => {
+export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress, textDecoration }) => {
   const dispatch = useDispatch();
   const prayersList = useSelector((state: RootState) => state.prayersSlice);
   const title = useSelector((state: RootState) => getPrayerTitle(state.prayersSlice, id));
@@ -55,7 +56,10 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress }) => {
             onValueChange={checkPrayer}
             style={styles.checkbox}
           />
-          <Text numberOfLines={1} style={styles.text}>
+          <Text
+            numberOfLines={1}
+            style={propsStyles({ textDecoration }).text}
+          >
             {title}
           </Text>
         </View>
@@ -76,6 +80,17 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress }) => {
   );
 };
 
+const propsStyles = ({ textDecoration }) =>
+  StyleSheet.create({
+    text: {
+      fontSize: 17,
+      lineHeight: 20,
+      maxWidth: '100%',
+      color: colors.black,
+      textDecorationLine: textDecoration
+    },
+  })
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -86,7 +101,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 20,
-    backgroundColor: '#EEE',
+    backgroundColor: colors.lightgray
   },
   textContainer: {
     flexDirection: 'row',
