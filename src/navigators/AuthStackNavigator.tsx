@@ -14,8 +14,21 @@ const AuthStack = createStackNavigator<AuthStackParams>();
 export const AuthStackNavigator: React.FC = () => {
   return (
     <AuthStack.Navigator screenOptions={{ headerShown: false }}>
-      <AuthStack.Screen name="Login" component={Login} />
-      <AuthStack.Screen name="SignUp" component={SignUp} options={{ title: 'Sign Up' }} />
+      <AuthStack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerTitleAlign: 'center',
+        }}
+      />
+      <AuthStack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{
+          title: 'Sign Up',
+          headerTitleAlign: 'center',
+        }}
+      />
     </AuthStack.Navigator>
   );
 }

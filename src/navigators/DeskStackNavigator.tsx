@@ -22,12 +22,18 @@ export const DeskStackNavigator: React.FC = () => {
       <DeskStack.Screen
         name="Home"
         component={Home}
-        options={{ title: 'My Desk' }}
+        options={{
+          title: 'My Desk',
+          headerTitleAlign: 'center',
+        }}
       />
       <DeskStack.Screen
         name="ColumnTabNavigator"
         component={ColumnTabNavigator}
-        options={{ title: '' }}
+        options={{
+          title: '',
+          headerTitleAlign: 'center',
+        }}
       />
       <DeskStack.Screen
         name="Prayer"
@@ -46,7 +52,10 @@ export const DeskStackNavigator: React.FC = () => {
       <DeskStack.Screen
         name="Settings"
         component={Settings}
-        options={{ title: 'Settings' }}
+        options={{
+          title: 'Settings',
+          headerTitleAlign: 'center',
+        }}
       />
     </DeskStack.Navigator>
   );
