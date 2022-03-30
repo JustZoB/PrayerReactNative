@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPrayerById, getPrayerChecked, getPrayerTitle } from '../store/prayers/selectors';
@@ -6,8 +6,9 @@ import { RootState } from '../store/store';
 import colors from '../utils/colors'
 import CheckBox from '@react-native-community/checkbox';
 import { checkPrayerStart, deletePrayerStart } from '../store/prayers/actions';
-import { Add, PrayerIcon, User } from '../assets/svg';
+import { PrayerIcon } from '../assets/svg';
 import { Swipeable } from 'react-native-gesture-handler';
+import { UserIcon } from './Prayer/UserIcon';
 
 interface PrayerButtonProps {
   id: number;
@@ -61,7 +62,7 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress }) => {
 
         <View style={styles.iconsContainer}>
           <View style={styles.iconContainer}>
-            <User />
+            <UserIcon />
             <Text style={styles.number}>3</Text>
           </View>
           <View style={styles.iconContainer}>
