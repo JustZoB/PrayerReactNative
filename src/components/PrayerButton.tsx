@@ -2,7 +2,7 @@ import React from 'react'
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckBox from '@react-native-community/checkbox';
-import { Swipeable } from 'react-native-gesture-handler';
+import { Swipeable, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import colors from '../utils/colors'
 import { RootState } from '../store/store';
@@ -43,8 +43,8 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress, textDec
   };
 
   return (
-    <Swipeable renderRightActions={rightActions}>
-      <TouchableOpacity
+    <Swipeable renderRightActions={rightActions} overshootRight={false}>
+      <TouchableWithoutFeedback
         style={styles.container}
         onPress={() => onPress()}
       >
@@ -76,7 +76,7 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress, textDec
           </View>
         </View>
 
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
     </Swipeable>
   );
 };
