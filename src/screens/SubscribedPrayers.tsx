@@ -7,13 +7,13 @@ import { CircleNumber } from '../components/CircleNumber';
 import { ColumnTabParams } from '../navigators/ColumnTabNavigator';
 
 export const SubscribedPrayers: React.FC = () => {
-  const tabNavigation = useNavigation<NativeStackNavigationProp<ColumnTabParams>>();
+  // const tabNavigation = useNavigation<NativeStackNavigationProp<ColumnTabParams>>();
 
-  tabNavigation.setOptions({
-    headerRight: () => (
-      <CircleNumber />
-    ),
-  })
+  // tabNavigation.setOptions({
+  //   headerRight: () => (
+  //     <CircleNumber />
+  //   ),
+  // })
 
   return (
     <ScrollView style={styles.container}>
