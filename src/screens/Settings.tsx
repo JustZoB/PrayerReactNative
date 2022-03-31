@@ -1,18 +1,26 @@
 import React from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { DeskStackParams } from '../navigators/DeskStackNavigator';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 
+import { userToken } from '../utils/constants';
+import AppRoutes from '../utils/routes';
 import { Button } from '../components/Button';
 import { logOut } from '../store/userLogin/reducers';
+import { removeItem } from '../services/asyncStorage';
 
-export const Settings: React.FC = () => {
+type SettingsNavigationProps = {
+  navigation: StackNavigationProp<DeskStackParams, AppRoutes.Settings>;
+  route: RouteProp<DeskStackParams, AppRoutes.Settings>;
+}
+
+export const Settings: React.FC<SettingsNavigationProps> = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const onLogOut = () => {
-    AsyncStorage.removeItem('userToken')
-    AsyncStorage.removeItem('userName')
-    AsyncStorage.removeItem('userEmail')
+    removeItem(userToken)
     dispatch(logOut())
   }
 

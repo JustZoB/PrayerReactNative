@@ -1,5 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 import React from 'react'
 import { Field, Form } from 'react-final-form';
 import { StyleSheet, View, ScrollView } from 'react-native';
@@ -7,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { DeskStackParams } from '../navigators/DeskStackNavigator';
 import { commentValidate } from '../utils/validate';
-import { PrayerRouteType } from '../services/navigationProps';
 import { RootState } from '../store/store';
 import { addCommentStart } from '../store/comments/actions';
 import { Pray, Message } from '../assets/svg'
@@ -19,17 +17,21 @@ import { Title } from '../components/Prayer/Title';
 import { TextField } from '../components/TextField';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { TextFieldError } from '../components/TextFieldError';
+import AppRoutes from '../utils/routes';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-interface PrayerProps {
-  route: PrayerRouteType;
+type PrayerNavigationProps = {
+  navigation: StackNavigationProp<DeskStackParams, AppRoutes.Prayer>;
+  route: RouteProp<DeskStackParams, AppRoutes.Prayer>;
 }
 
-export const Prayer: React.FC<PrayerProps> = ({ route }) => {
+export const Prayer: React.FC<PrayerNavigationProps> = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const comments = useSelector((state: RootState) => state.commentsSlice);
+  const BODY_FIELD = 'body';
 
-  const onAddComment = (values: { body: string }) => {
+  const onAddComment = (values: { body: string }, form) => {
+    form.reset()
     dispatch(addCommentStart({
       body: values.body,
       prayerId: route.params.id
@@ -58,12 +60,11 @@ export const Prayer: React.FC<PrayerProps> = ({ route }) => {
           render={({ handleSubmit, submitting, form }) => (
             <>
               <Field
-                name='body'
+                name={BODY_FIELD}
                 render={({ input, meta }) => (
                   <View style={styles.inputContainer}>
                     <TextField
-                      paddingLeft={48}
-                      borderRadius={0}
+                      stylesProps={{ paddingLeft: 48, borderRadius: 0 }}
                       value={input.value}
                       placeholder='Add a comment...'
                       onTextChange={input.onChange}
@@ -78,7 +79,6 @@ export const Prayer: React.FC<PrayerProps> = ({ route }) => {
                 disabled={submitting}
                 onPress={() => {
                   handleSubmit()
-                  form.reset()
                 }}
               />
               {comments.error &&
@@ -106,5 +106,5 @@ const styles = StyleSheet.create({
   },
   blank: {
     height: 20,
-  }
+  },
 });

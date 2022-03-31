@@ -10,13 +10,13 @@ import { MyPrayers } from "../screens/MyPrayers";
 import { SubscribedPrayers } from "../screens/SubscribedPrayers";
 import { DeskStackParams } from "./DeskStackNavigator";
 import { Settings } from "../assets/svg";
-import colors from "../utils/colors";
+import AppRoutes from "../utils/routes";
 
-type Props = NativeStackScreenProps<DeskStackParams, 'ColumnTabNavigator'>;
+type Props = NativeStackScreenProps<DeskStackParams, AppRoutes.ColumnTabNavigator>;
 
 export type ColumnTabParams = {
-  MyPrayers;
-  SubscribedPrayers;
+  [AppRoutes.MyPrayers]: { id: number };
+  [AppRoutes.SubscribedPrayers]: undefined;
 }
 
 const Tab = createMaterialTopTabNavigator<ColumnTabParams>();
@@ -24,12 +24,11 @@ const Tab = createMaterialTopTabNavigator<ColumnTabParams>();
 export const ColumnTabNavigator: React.FC<Props> = ({ route, navigation }) => {
   const stackNavigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const title = useSelector((state: RootState) => getColumnTitle(state.columnsSlice, route.params.id));
-  console.log('TITLE', title)
 
   stackNavigation.setOptions({
     headerRight: () => (
       <Settings onPress={() => {
-        navigation.navigate('Settings')
+        navigation.navigate(AppRoutes.Settings)
       }} />
     ),
   })
@@ -43,13 +42,13 @@ export const ColumnTabNavigator: React.FC<Props> = ({ route, navigation }) => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="MyPrayers"
+        name={AppRoutes.MyPrayers}
         component={MyPrayers}
         options={{ title: 'My Prayers' }}
         initialParams={{ id: route.params.id }}
       />
       <Tab.Screen
-        name="SubscribedPrayers"
+        name={AppRoutes.SubscribedPrayers}
         component={SubscribedPrayers}
         options={{ title: 'Subscribed' }}
       />

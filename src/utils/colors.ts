@@ -1,4 +1,4 @@
-enum Colors {
+enum colors {
   beige = '#BFB393',
   red = '#FF2E2E',
   darkRed = '#AC5253',
@@ -11,4 +11,4 @@ enum Colors {
   black = '#514D47',
 };
 
-export default Colors;
+export default colors;

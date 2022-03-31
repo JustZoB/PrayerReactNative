@@ -5,14 +5,14 @@ import colors from '../utils/colors'
 
 interface ButtonProps {
   title: string;
-  onPress: Function;
+  onPress(): void;
 }
 
 export const RoundButton: React.FC<ButtonProps> = ({ title, onPress }) => {
   return (
     <TouchableOpacity
       style={styles.button}
-      onPress={() => onPress()}
+      onPress={onPress}
     >
       <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>

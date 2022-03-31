@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import colors from '../../utils/colors'
@@ -7,6 +7,7 @@ import { RootState } from "../../store/store";
 import { getCommentsStart } from "../../store/comments/actions";
 import { getCommentsByPrayerId } from "../../store/comments/selectors";
 import { Comment } from './Comment'
+import { FlatList } from "react-native-gesture-handler";
 
 interface CommentsProps {
   id: number;
@@ -14,26 +15,23 @@ interface CommentsProps {
 
 export const Comments: React.FC<CommentsProps> = ({ id }) => {
   const dispatch = useDispatch();
-  const thisComments = useSelector((state: RootState) => getCommentsByPrayerId(state.commentsSlice, id));
+  const currentComments = useSelector((state: RootState) => getCommentsByPrayerId(state.commentsSlice, id));
 
   React.useEffect(() => {
     dispatch(getCommentsStart())
   }, [])
 
   return (
-    <View>
+    <>
       <Text style={styles.title}>Comments</Text>
-      {thisComments &&
-        <>
-          {thisComments.map(({ id }) => (
-            <Comment
-              key={id}
-              id={id}
-            />
-          ))}
-        </>
-      }
-    </View>
+      <FlatList
+        keyExtractor={(item) => item.id.toString()}
+        data={currentComments}
+        renderItem={({ item }) => (
+          <Comment id={item.id} />
+        )}
+      />
+    </>
   )
 }
 

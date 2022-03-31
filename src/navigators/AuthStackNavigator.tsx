@@ -4,10 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Login } from "../screens/Login";
 import { SignUp } from "../screens/SignUp";
 import colors from "../utils/colors";
+import AppRoutes from "../utils/routes";
 
 export type AuthStackParams = {
-  Login;
-  SignUp;
+  [AppRoutes.Login]: undefined;
+  [AppRoutes.SignUp]: undefined;
 }
 
 const AuthStack = createStackNavigator<AuthStackParams>();
@@ -21,14 +22,14 @@ export const AuthStackNavigator: React.FC = () => {
       }}
     >
       <AuthStack.Screen
-        name="Login"
+        name={AppRoutes.Login}
         component={Login}
         options={{
           headerTitleAlign: 'center',
         }}
       />
       <AuthStack.Screen
-        name="SignUp"
+        name={AppRoutes.SignUp}
         component={SignUp}
         options={{
           title: 'Sign Up',

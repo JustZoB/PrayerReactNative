@@ -5,6 +5,7 @@ import { logInSuccess, registerSuccess, logInFailure, registerFailure, changeLoa
 import { getTokenAsyncStorage, setItem } from '../../services/asyncStorage';
 import { setAccessToken } from '../../services/axios';
 import { logIn, register } from './APIServices';
+import { userToken } from '../../utils/constants';
 
 export function* logInSaga({ payload: { email, password } }) {
   yield put(changeLoading({ loading: true }))
@@ -12,9 +13,7 @@ export function* logInSaga({ payload: { email, password } }) {
     const response = yield logIn(email, password)
     if (response.user) {
       yield put(logInSuccess(response))
-      setItem('userToken', response.user.token)
-      setItem('userName', response.user.name)
-      setItem('userEmail', response.user.email)
+      setItem(userToken, response.user.token)
       setAccessToken(response.user.token)
     } else if (response.error) {
       yield put(logInFailure(response))
@@ -31,9 +30,7 @@ export function* registerSaga({ payload: { email, name, password } }) {
     const response = yield register(email, name, password)
     if (response.user) {
       yield put(registerSuccess(response))
-      setItem('userToken', response.user.token)
-      setItem('userName', response.user.name)
-      setItem('userEmail', response.user.email)
+      setItem(userToken, response.user.token)
       setAccessToken(response.user.token)
     } else if (response.error) {
       yield put(registerFailure(response))

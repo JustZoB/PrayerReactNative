@@ -5,7 +5,7 @@ import colors from '../utils/colors'
 
 interface ButtonProps {
   title: string;
-  onPress: Function;
+  onPress(): void
   disabled?: boolean;
 }
 
@@ -14,7 +14,7 @@ export const Button: React.FC<ButtonProps> = ({ title, onPress, disabled }) => {
     <TouchableOpacity
       style={styles.button}
       disabled={disabled}
-      onPress={() => onPress()}
+      onPress={onPress}
     >
       <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>

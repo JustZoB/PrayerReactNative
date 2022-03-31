@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StyleSheet, View, ScrollView, Modal, Pressable, Text, TouchableWithoutFeedback } from 'react-native';
+import { RouteProp } from '@react-navigation/native';
+import { StyleSheet, View, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Field, Form } from 'react-final-form';
+import { FlatList } from 'react-native-gesture-handler';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import { DeskStackParams } from '../navigators/DeskStackNavigator';
 import { columnValidate } from '../utils/validate';
+import colors from '../utils/colors';
+import AppRoutes from '../utils/routes';
 import { RootState } from '../store/store';
 import { addColumnStart, getColumnsStart } from '../store/columns/actions';
 import { Add } from '../assets/svg';
@@ -15,13 +18,17 @@ import { ColumnButton } from '../components/ColumnButton';
 import { TextField } from '../components/TextField';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { TextFieldError } from '../components/TextFieldError';
-import colors from '../utils/colors';
 
-export const Home: React.FC = ({ }) => {
+type HomeNavigationProps = {
+  navigation: StackNavigationProp<DeskStackParams, AppRoutes.Home>;
+  route: RouteProp<DeskStackParams, AppRoutes.Home>;
+}
+
+export const Home: React.FC<HomeNavigationProps> = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
-  const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const columnsList = useSelector((state: RootState) => state.columnsSlice);
+  const TITLE_FIELD = 'title';
 
   React.useEffect(() => {
     dispatch(getColumnsStart())
@@ -32,7 +39,8 @@ export const Home: React.FC = ({ }) => {
     })
   }, [navigation])
 
-  const onAddColumn = (values: { title: string }) => {
+  const onAddColumn = (values: { title: string }, form) => {
+    form.reset()
     dispatch(addColumnStart({
       title: values.title
     }))
@@ -58,12 +66,12 @@ export const Home: React.FC = ({ }) => {
                     render={({ handleSubmit, submitting, form }) => (
                       <>
                         <Field
-                          name='title'
+                          name={TITLE_FIELD}
                           render={({ input, meta }) => (
                             <View>
                               <TextField
                                 value={input.value}
-                                paddingLeft={48}
+                                stylesProps={{ paddingLeft: 48 }}
                                 placeholder='Add a column...'
                                 onTextChange={input.onChange}
                               />
@@ -77,7 +85,6 @@ export const Home: React.FC = ({ }) => {
                           disabled={submitting}
                           onPress={() => {
                             handleSubmit()
-                            form.reset()
                           }}
                         />
                         {columnsList.error &&
@@ -93,19 +100,18 @@ export const Home: React.FC = ({ }) => {
         </Modal>
 
         <View>
-          {columnsList.columns &&
-            <>
-              {columnsList.columns.map(({ id }) => (
-                <ColumnButton
-                  key={id}
-                  id={id}
-                  onPress={() => {
-                    navigation.navigate('ColumnTabNavigator', { id })
-                  }}
-                />
-              ))}
-            </>
-          }
+          <FlatList
+            keyExtractor={(item) => item.id.toString()}
+            data={columnsList.columns}
+            renderItem={({ item }) => (
+              <ColumnButton
+                id={item.id}
+                onPress={() => {
+                  navigation.navigate(AppRoutes.ColumnTabNavigator, { id: item.id })
+                }}
+              />
+            )}
+          />
         </View>
       </ScrollView>
     </>
@@ -133,7 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: colors.backgroundOpacity,
   },
   modalInner: {
     padding: 15,

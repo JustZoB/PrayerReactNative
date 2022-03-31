@@ -1,29 +1,28 @@
 import React from 'react'
-import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckBox from '@react-native-community/checkbox';
-import { Swipeable, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Swipeable } from 'react-native-gesture-handler';
 
 import colors from '../utils/colors'
 import { RootState } from '../store/store';
-import { getPrayerChecked, getPrayerTitle } from '../store/prayers/selectors';
+import { getPrayerById } from '../store/prayers/selectors';
 import { checkPrayerStart, deletePrayerStart } from '../store/prayers/actions';
 import { PrayerIcon } from '../assets/svg';
 import { UserIcon } from './Prayer/UserIcon';
 
 interface PrayerButtonProps {
   id: number;
-  onPress?: Function;
-  textDecoration?: string;
+  onPress(): void;
+  stylesProps?: Object;
 }
 
-export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress, textDecoration }) => {
+export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress, stylesProps }) => {
   const dispatch = useDispatch();
-  const title = useSelector((state: RootState) => getPrayerTitle(state.prayersSlice, id));
-  const isChecked = useSelector((state: RootState) => getPrayerChecked(state.prayersSlice, id));
+  const currentPrayer = useSelector((state: RootState) => getPrayerById(state.prayersSlice, id));
 
   const checkPrayer = () => {
-    dispatch(checkPrayerStart({ id, checked: !isChecked }))
+    dispatch(checkPrayerStart({ id, checked: !currentPrayer.checked }))
   }
 
   const deletePrayer = () => {
@@ -42,55 +41,43 @@ export const PrayerButton: React.FC<PrayerButtonProps> = ({ id, onPress, textDec
     );
   };
 
+
   return (
     <Swipeable renderRightActions={rightActions} overshootRight={false}>
-      <TouchableWithoutFeedback
-        style={styles.container}
-        onPress={() => onPress()}
-      >
-        <View style={styles.textContainer}>
-          <View style={styles.stick} />
-          <CheckBox
-            value={isChecked}
-            onFillColor={colors.black}
-            onCheckColor={colors.white}
-            onValueChange={checkPrayer}
-            style={styles.checkbox}
-          />
-          <Text
-            numberOfLines={1}
-            style={propsStyles({ textDecoration }).text}
-          >
-            {title}
-          </Text>
-        </View>
-
-        <View style={styles.iconsContainer}>
-          <View style={styles.iconContainer}>
-            <UserIcon />
-            <Text style={styles.number}>3</Text>
+      <TouchableWithoutFeedback onPress={onPress} >
+        <View style={styles.container}>
+          <View style={styles.textContainer}>
+            <View style={styles.stick} />
+            <CheckBox
+              value={currentPrayer.checked}
+              onFillColor={colors.black}
+              onCheckColor={colors.white}
+              onValueChange={checkPrayer}
+              style={styles.checkbox}
+            />
+            <Text
+              numberOfLines={1}
+              style={[styles.text, stylesProps]}
+            >
+              {currentPrayer.title}
+            </Text>
           </View>
-          <View style={styles.iconContainer}>
-            <PrayerIcon />
-            <Text style={styles.number}>123</Text>
+
+          <View style={styles.iconsContainer}>
+            <View style={styles.iconContainer}>
+              <UserIcon />
+              <Text style={styles.number}>3</Text>
+            </View>
+            <View style={styles.iconContainer}>
+              <PrayerIcon />
+              <Text style={styles.number}>123</Text>
+            </View>
           </View>
         </View>
-
       </TouchableWithoutFeedback>
     </Swipeable>
   );
 };
-
-const propsStyles = ({ textDecoration }) =>
-  StyleSheet.create({
-    text: {
-      fontSize: 17,
-      lineHeight: 20,
-      maxWidth: '100%',
-      color: colors.black,
-      textDecorationLine: textDecoration
-    },
-  })
 
 const styles = StyleSheet.create({
   container: {
@@ -103,6 +90,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 20,
     backgroundColor: colors.white,
+    width: '100%',
   },
   textContainer: {
     flexDirection: 'row',

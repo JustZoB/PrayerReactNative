@@ -6,12 +6,13 @@ import { Home } from "../screens/Home";
 import { Prayer } from "../screens/Prayer";
 import { Settings } from "../screens/Settings";
 import { ColumnTabNavigator } from "./ColumnTabNavigator";
+import AppRoutes from "../utils/routes";
 
 export type DeskStackParams = {
-  Home;
-  Prayer;
-  Settings;
-  ColumnTabNavigator: { id: number };
+  [AppRoutes.Home]: undefined;
+  [AppRoutes.Prayer]: { id: number };
+  [AppRoutes.Settings]: undefined;
+  [AppRoutes.ColumnTabNavigator]: { id: number };
 }
 
 const DeskStack = createStackNavigator<DeskStackParams>();
@@ -29,7 +30,7 @@ export const DeskStackNavigator: React.FC = () => {
       }}
     >
       <DeskStack.Screen
-        name="Home"
+        name={AppRoutes.Home}
         component={Home}
         options={{
           title: 'My Desk',
@@ -37,7 +38,7 @@ export const DeskStackNavigator: React.FC = () => {
         }}
       />
       <DeskStack.Screen
-        name="ColumnTabNavigator"
+        name={AppRoutes.ColumnTabNavigator}
         component={ColumnTabNavigator}
         options={{
           title: '',
@@ -48,7 +49,7 @@ export const DeskStackNavigator: React.FC = () => {
         }}
       />
       <DeskStack.Screen
-        name="Prayer"
+        name={AppRoutes.Prayer}
         component={Prayer}
         options={{
           title: '',
@@ -62,7 +63,7 @@ export const DeskStackNavigator: React.FC = () => {
         }}
       />
       <DeskStack.Screen
-        name="Settings"
+        name={AppRoutes.Settings}
         component={Settings}
         options={{
           title: 'Settings',

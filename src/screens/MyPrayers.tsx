@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import { Field, Form } from 'react-final-form';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { ScrollView } from 'react-native-gesture-handler';
+import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
 
 import { DeskStackParams } from '../navigators/DeskStackNavigator';
 import { prayerValidate } from '../utils/validate';
-import { ColumnRouteType } from '../services/navigationProps';
+import colors from '../utils/colors';
+import AppRoutes from '../utils/routes';
 import { RootState } from '../store/store';
 import { addPrayerStart, getPrayersStart } from '../store/prayers/actions';
 import { getPrayersByColumnId, getPrayersChecked, getPrayersUnChecked } from '../store/prayers/selectors';
@@ -17,37 +20,35 @@ import { TextField } from '../components/TextField';
 import { RoundButton } from '../components/RoundButton';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { TextFieldError } from '../components/TextFieldError';
-import colors from '../utils/colors';
+import { ColumnTabParams } from '../navigators/ColumnTabNavigator';
 
-interface ColumnProps {
-  route: ColumnRouteType;
+type MyPrayersNavigationProps = {
+  navigation: MaterialTopTabNavigationProp<ColumnTabParams, AppRoutes.MyPrayers>;
+  route: RouteProp<ColumnTabParams, AppRoutes.MyPrayers>;
 }
 
-export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
+export const MyPrayers: React.FC<MyPrayersNavigationProps> = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
+  const stackNavigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const prayers = useSelector((state: RootState) => state.prayersSlice);
-  const [answeredButton, setAnsweredButton] = useState<string>('Show answered prayers')
   const [isAnsweredPrayersShown, setIsAnsweredPrayersShown] = useState<boolean>(false)
-  const thisPrayers = useSelector((state: RootState) => getPrayersByColumnId(state.prayersSlice, route.params.id));
-  const checkedPrayers = useSelector(() => getPrayersChecked(thisPrayers));
-  const unCheckedPrayers = useSelector(() => getPrayersUnChecked(thisPrayers));
+  const currentPrayers = useSelector((state: RootState) => getPrayersByColumnId(state.prayersSlice, route.params.id));
+  const checkedPrayers = useSelector(() => getPrayersChecked(currentPrayers));
+  const unCheckedPrayers = useSelector(() => getPrayersUnChecked(currentPrayers));
+  const TITLE_FIELD = 'title';
 
-  const onAddPrayer = (values: { title: string }) => {
+  const onAddPrayer = (values: { title: string }, form) => {
+    form.reset()
     dispatch(addPrayerStart({
       title: values.title,
       columnId: route.params.id
     }))
   }
 
-  const hidePrayers = () => {
-    if (!isAnsweredPrayersShown) {
-      setAnsweredButton('Hide answered prayers')
-      setIsAnsweredPrayersShown(true)
-    } else {
-      setAnsweredButton('Show answered prayers')
-      setIsAnsweredPrayersShown(false)
-    }
+  const togglePrayers = () => {
+    !isAnsweredPrayersShown
+      ? setIsAnsweredPrayersShown(true)
+      : setIsAnsweredPrayersShown(false)
   }
 
   React.useEffect(() => {
@@ -63,12 +64,12 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
           render={({ handleSubmit, submitting, form }) => (
             <>
               <Field
-                name='title'
+                name={TITLE_FIELD}
                 render={({ input, meta }) => (
                   <View>
                     <TextField
                       value={input.value}
-                      paddingLeft={48}
+                      stylesProps={{ paddingLeft: 48 }}
                       placeholder='Add a prayer...'
                       onTextChange={input.onChange}
                     />
@@ -82,7 +83,6 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
                 disabled={submitting}
                 onPress={() => {
                   handleSubmit()
-                  form.reset()
                 }}
               />
               {prayers.error &&
@@ -95,36 +95,36 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
 
 
       <View>
-        {unCheckedPrayers &&
-          <>
-            {unCheckedPrayers.map(({ id }) => (
-              <PrayerButton
-                key={id}
-                id={id}
-                onPress={() => {
-                  navigation.navigate('Prayer', { id })
-                }}
-              />
-            ))}
-          </>
-        }
-        <RoundButton
-          title={answeredButton}
-          onPress={hidePrayers}
+        <FlatList
+          keyExtractor={(item) => item.id.toString()}
+          data={unCheckedPrayers}
+          renderItem={({ item }) => (
+            <PrayerButton
+              id={item.id}
+              onPress={() => {
+                stackNavigation.navigate(AppRoutes.Prayer, { id: item.id })
+              }}
+            />
+          )}
         />
-        {isAnsweredPrayersShown && checkedPrayers &&
-          <>
-            {checkedPrayers.map(({ id }) => (
+        <RoundButton
+          title={isAnsweredPrayersShown ? 'Hide answered prayers' : 'Show answered prayers'}
+          onPress={togglePrayers}
+        />
+        {isAnsweredPrayersShown &&
+          <FlatList
+            keyExtractor={(item) => item.id.toString()}
+            data={checkedPrayers}
+            renderItem={({ item }) => (
               <PrayerButton
-                key={id}
-                id={id}
-                textDecoration={'line-through'}
+                id={item.id}
+                stylesProps={{ textDecorationLine: 'line-through' }}
                 onPress={() => {
-                  navigation.navigate('Prayer', { id })
+                  stackNavigation.navigate(AppRoutes.Prayer, { id: item.id })
                 }}
               />
-            ))}
-          </>
+            )}
+          />
         }
       </View>
     </ScrollView>
@@ -133,8 +133,8 @@ export const MyPrayers: React.FC<ColumnProps> = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    overflow: 'scroll',
     width: '100%',
+    minHeight: '100%',
     backgroundColor: colors.white,
   },
   formContainer: {

@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, Image } from "react-native";
 
 import colors from '../../utils/colors'
 import { CirclePlus } from "../../assets/svg";
+import { Gloria, Hanna } from "../../assets/images/profiles";
 
 export const Members: React.FC = () => {
   return (
@@ -11,11 +12,11 @@ export const Members: React.FC = () => {
       <View style={styles.membersContainer}>
         <Image
           style={styles.profileImage}
-          source={require('../../assets/images/profiles/Gloria.png')}
+          source={Gloria}
         />
         <Image
           style={styles.profileImage}
-          source={require('../../assets/images/profiles/Hanna.png')}
+          source={Hanna}
         />
         <CirclePlus />
       </View>

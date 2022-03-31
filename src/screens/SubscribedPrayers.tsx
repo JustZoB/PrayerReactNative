@@ -1,13 +1,20 @@
 import React from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import { CircleNumber } from '../components/CircleNumber';
 import { ColumnTabParams } from '../navigators/ColumnTabNavigator';
 import colors from '../utils/colors';
+import AppRoutes from '../utils/routes';
+import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
 
-export const SubscribedPrayers: React.FC = () => {
+type SubscribedPrayersNavigationProps = {
+  navigation: MaterialTopTabNavigationProp<ColumnTabParams, AppRoutes.SubscribedPrayers>;
+  route: RouteProp<ColumnTabParams, AppRoutes.SubscribedPrayers>;
+}
+
+export const SubscribedPrayers: React.FC<SubscribedPrayersNavigationProps> = ({ navigation, route }) => {
   // const tabNavigation = useNavigation<NativeStackNavigationProp<ColumnTabParams>>();
 
   // tabNavigation.setOptions({

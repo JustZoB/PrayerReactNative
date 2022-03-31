@@ -4,32 +4,31 @@ import { useSelector } from "react-redux";
 
 import colors from '../../utils/colors'
 import { RootState } from "../../store/store";
-import { getCommentBody, getCommentDate, getCommentUser, getDateString } from "../../store/comments/selectors";
+import { getComment } from "../../store/comments/selectors";
+import { getDateString } from "../../utils/dates";
+import { Anna } from "../../assets/images/profiles";
 
 interface CommentsProps {
-  key: number,
   id: number,
 }
 
 export const Comment: React.FC<CommentsProps> = ({ id }) => {
-  const body = useSelector((state: RootState) => getCommentBody(state.commentsSlice, id));
-  const userId = useSelector((state: RootState) => getCommentUser(state.commentsSlice, id));
-  const created = useSelector((state: RootState) => getCommentDate(state.commentsSlice, id));
-  const date = getDateString(created)
+  const currentComment = useSelector((state: RootState) => getComment(state.commentsSlice, id));
+  const date = getDateString(currentComment.created)
 
   return (
     <View style={styles.mainContainer}>
       <Image
         style={styles.profileImage}
-        source={require('../../assets/images/profiles/Anna.png')}
+        source={Anna}
       />
       <View style={styles.profileContainer}>
         <View style={styles.userContainer}>
-          <Text style={styles.userName}>{userId}</Text>
+          <Text style={styles.userName}>{currentComment.userId}</Text>
           <Text style={styles.date}>{date}</Text>
         </View>
 
-        <Text style={styles.bodyText}>{body}</Text>
+        <Text style={styles.bodyText}>{currentComment.body}</Text>
       </View>
     </View>
   )
@@ -42,6 +41,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     padding: 15,
     flexDirection: 'row',
+    width: '100%',
   },
   profileContainer: {
     flexDirection: 'column',

@@ -1,13 +1,14 @@
 import React from 'react'
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 import { Form, Field } from 'react-final-form'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import { AuthStackParams } from '../navigators/AuthStackNavigator';
 import colors from '../utils/colors'
 import { loginValidate } from '../utils/validate';
+import AppRoutes from '../utils/routes';
 import { RootState } from '../store/store';
 import { logInStart } from '../store/userLogin/action';
 import { clearLogInErrors } from '../store/userLogin/reducers';
@@ -17,14 +18,20 @@ import { AppLoader } from '../components/AppLoader';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { TextFieldError } from '../components/TextFieldError';
 
-export const Login: React.FC = () => {
+type LoginNavigationProps = {
+  navigation: StackNavigationProp<AuthStackParams, AppRoutes.Login>;
+  route: RouteProp<AuthStackParams, AppRoutes.Login>;
+}
+
+export const Login: React.FC<LoginNavigationProps> = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
   const auth = useSelector((state: RootState) => state.userLoginSlice);
+  const EMAIL_FIELD = 'email';
+  const PASSWORD_FIELD = 'password';
 
   const navigateToSignUp = () => {
     dispatch(clearLogInErrors())
-    navigation.navigate('SignUp')
+    navigation.navigate(AppRoutes.SignUp)
   }
 
   const onSignIn = (values: { email: string, password: string }) => {
@@ -47,7 +54,7 @@ export const Login: React.FC = () => {
           render={({ handleSubmit, submitting }) => (
             <>
               <Field
-                name='email'
+                name={EMAIL_FIELD}
                 render={({ input, meta }) => (
                   <View style={styles.inputContainer}>
                     <TextField
@@ -61,7 +68,7 @@ export const Login: React.FC = () => {
                 )}
               />
               <Field
-                name='password'
+                name={PASSWORD_FIELD}
                 render={({ input, meta }) => (
                   <View style={styles.inputContainer}>
                     <TextField

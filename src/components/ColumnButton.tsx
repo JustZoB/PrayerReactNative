@@ -8,17 +8,16 @@ import { getColumnTitle } from '../store/columns/selectors';
 
 interface ColumnProps {
   id: number;
-  onPress: Function;
+  onPress(): void;
 }
 
 export const ColumnButton: React.FC<ColumnProps> = ({ id, onPress }) => {
-  const columnsList = useSelector((state: RootState) => state.columnsSlice);
-  const title = useSelector((state: RootState) => getColumnTitle(columnsList, id));
+  const title = useSelector((state: RootState) => getColumnTitle(state.columnsSlice, id));
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => onPress()}
+      onPress={onPress}
     >
       <Text style={styles.columnButton}>
         {title}
