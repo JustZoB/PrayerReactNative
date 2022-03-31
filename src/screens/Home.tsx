@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, Modal, Pressable, Text, TouchableWithoutFeedback } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Field, Form } from 'react-final-form';
 
@@ -9,15 +9,17 @@ import { DeskStackParams } from '../navigators/DeskStackNavigator';
 import { columnValidate } from '../utils/validate';
 import { RootState } from '../store/store';
 import { addColumnStart, getColumnsStart } from '../store/columns/actions';
-import { Add, Settings } from '../assets/svg';
+import { Add } from '../assets/svg';
 import { AppLoader } from '../components/AppLoader';
 import { ColumnButton } from '../components/ColumnButton';
 import { TextField } from '../components/TextField';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { TextFieldError } from '../components/TextFieldError';
+import colors from '../utils/colors';
 
 export const Home: React.FC = ({ }) => {
   const dispatch = useDispatch();
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<NativeStackNavigationProp<DeskStackParams>>();
   const columnsList = useSelector((state: RootState) => state.columnsSlice);
 
@@ -25,9 +27,7 @@ export const Home: React.FC = ({ }) => {
     dispatch(getColumnsStart())
     navigation.setOptions({
       headerRight: () => (
-        <Settings onPress={() => {
-          navigation.navigate('Settings')
-        }} />
+        <Add onPress={() => setModalVisible(true)} />
       )
     })
   }, [navigation])
@@ -44,40 +44,54 @@ export const Home: React.FC = ({ }) => {
         <AppLoader />
       }
       <ScrollView style={styles.container}>
-        <Form
-          onSubmit={onAddColumn}
-          validate={columnValidate}
-          render={({ handleSubmit, submitting, form }) => (
-            <>
-              <Field
-                name='title'
-                render={({ input, meta }) => (
-                  <View style={styles.inputContainer}>
-                    <TextField
-                      value={input.value}
-                      paddingLeft={48}
-                      placeholder='Add a column...'
-                      onTextChange={input.onChange}
-                    />
-                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
-                  </View>
-                )}
-              />
+        <Modal
+          transparent
+          visible={modalVisible}
+        >
+          <TouchableWithoutFeedback onPress={() => setModalVisible(!modalVisible)}>
+            <View style={styles.modal}>
+              <TouchableWithoutFeedback>
+                <View style={styles.modalInner}>
+                  <Form
+                    onSubmit={onAddColumn}
+                    validate={columnValidate}
+                    render={({ handleSubmit, submitting, form }) => (
+                      <>
+                        <Field
+                          name='title'
+                          render={({ input, meta }) => (
+                            <View>
+                              <TextField
+                                value={input.value}
+                                paddingLeft={48}
+                                placeholder='Add a column...'
+                                onTextChange={input.onChange}
+                              />
+                              {meta.touched && meta.error && <TextFieldError text={meta.error} />}
+                            </View>
+                          )}
+                        />
 
-              <Add
-                style={styles.commentIcon}
-                disabled={submitting}
-                onPress={() => {
-                  handleSubmit()
-                  form.reset()
-                }}
-              />
-              {columnsList.error &&
-                <ErrorMessage text={columnsList.error.message} />
-              }
-            </>
-          )}
-        />
+                        <Add
+                          style={styles.commentIcon}
+                          disabled={submitting}
+                          onPress={() => {
+                            handleSubmit()
+                            form.reset()
+                          }}
+                        />
+                        {columnsList.error &&
+                          <ErrorMessage text={columnsList.error.message} />
+                        }
+                      </>
+                    )}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+
         <View>
           {columnsList.columns &&
             <>
@@ -110,12 +124,29 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 20,
   },
-  inputContainer: {
-    marginBottom: 10,
-  },
   commentIcon: {
     position: 'absolute',
-    top: 14,
-    left: 14,
+    top: 28,
+    left: 28,
+  },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalInner: {
+    padding: 15,
+    borderRadius: 10,
+    width: '90%',
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });

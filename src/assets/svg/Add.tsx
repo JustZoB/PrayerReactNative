@@ -1,5 +1,6 @@
 import * as React from 'react';
-import Svg, { SvgProps, Mask, Path, G } from 'react-native-svg';
+import { StyleSheet } from "react-native";
+import Svg, { SvgProps, Path, G } from 'react-native-svg';
 
 const SvgAdd = (props: SvgProps) => (
   <Svg
@@ -7,6 +8,7 @@ const SvgAdd = (props: SvgProps) => (
     height={22}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    style={styles.container}
     {...props}>
     <G stroke="#72a8bc" strokeWidth={2} fill="none">
       <Path d="M12.25 1.84822L12.25 22" />
@@ -17,5 +19,11 @@ const SvgAdd = (props: SvgProps) => (
     </G>
   </Svg>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 20,
+  },
+})
 
 export default SvgAdd;
