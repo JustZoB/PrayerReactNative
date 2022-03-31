@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import { CircleNumber } from '../components/CircleNumber';
 import { ColumnTabParams } from '../navigators/ColumnTabNavigator';
+import colors from '../utils/colors';
 
 export const SubscribedPrayers: React.FC = () => {
   // const tabNavigation = useNavigation<NativeStackNavigationProp<ColumnTabParams>>();
@@ -29,5 +30,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     width: '100%',
+    backgroundColor: colors.white,
   },
 });

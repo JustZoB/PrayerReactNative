@@ -10,6 +10,7 @@ import { MyPrayers } from "../screens/MyPrayers";
 import { SubscribedPrayers } from "../screens/SubscribedPrayers";
 import { DeskStackParams } from "./DeskStackNavigator";
 import { Settings } from "../assets/svg";
+import colors from "../utils/colors";
 
 type Props = NativeStackScreenProps<DeskStackParams, 'ColumnTabNavigator'>;
 

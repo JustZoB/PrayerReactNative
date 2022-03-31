@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 20,
-    backgroundColor: colors.lightgray
+    backgroundColor: colors.white,
   },
   textContainer: {
     flexDirection: 'row',

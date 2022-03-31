@@ -18,7 +18,16 @@ const DeskStack = createStackNavigator<DeskStackParams>();
 
 export const DeskStackNavigator: React.FC = () => {
   return (
-    <DeskStack.Navigator>
+    <DeskStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          borderColor: colors.gray,
+          borderStyle: 'solid',
+          borderBottomWidth: 1,
+        },
+        cardStyle: { backgroundColor: colors.white }
+      }}
+    >
       <DeskStack.Screen
         name="Home"
         component={Home}
@@ -33,6 +42,9 @@ export const DeskStackNavigator: React.FC = () => {
         options={{
           title: '',
           headerTitleAlign: 'center',
+          headerStyle: {
+            borderBottomWidth: 0,
+          }
         }}
       />
       <DeskStack.Screen

@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import { Login } from "../screens/Login";
 import { SignUp } from "../screens/SignUp";
+import colors from "../utils/colors";
 
 export type AuthStackParams = {
   Login;
@@ -13,7 +14,12 @@ const AuthStack = createStackNavigator<AuthStackParams>();
 
 export const AuthStackNavigator: React.FC = () => {
   return (
-    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+    <AuthStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        cardStyle: { backgroundColor: colors.white }
+      }}
+    >
       <AuthStack.Screen
         name="Login"
         component={Login}

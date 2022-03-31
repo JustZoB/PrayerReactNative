@@ -17,6 +17,7 @@ import { TextField } from '../components/TextField';
 import { RoundButton } from '../components/RoundButton';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { TextFieldError } from '../components/TextFieldError';
+import colors from '../utils/colors';
 
 interface ColumnProps {
   route: ColumnRouteType;
@@ -134,6 +135,7 @@ const styles = StyleSheet.create({
   container: {
     overflow: 'scroll',
     width: '100%',
+    backgroundColor: colors.white,
   },
   formContainer: {
     padding: 15,
