@@ -1,6 +1,19 @@
 import axios from 'axios';
 
-const instance = axios.create({ baseURL: 'https://prayer.herokuapp.com/' });
+const baseURL = 'https://prayer.herokuapp.com/';
+const instance = axios.create({ baseURL: baseURL });
+
+export const setAccessToken = (accessToken: string) => {
+  instance.interceptors.request.use(
+    config => {
+      config.headers.authorization = `Bearer ${accessToken}`
+      return config;
+    },
+    error => {
+      return Promise.reject(error)
+    }
+  )
+}
 
 export interface SignIn {
   email: string,
@@ -20,7 +33,7 @@ export interface User {
   token: string,
 }
 
-export interface Columns {
+export interface Column {
   id: number,
   title: string,
   description: string,
@@ -28,20 +41,33 @@ export interface Columns {
 }
 
 export interface Prayer {
-  id: number,
+  id?: number,
   title: string,
-  description: string,
-  checked: boolean,
+  description?: string,
+  checked?: boolean,
   columnId: number,
-  commentsIds: string[],
+  commentsIds?: string[] | undefined,
 }
 
-export interface Comments {
-  id: number,
+export interface PrayerPost {
+  id?: number,
+  title: string,
+  description?: string,
+  checked?: boolean,
+  column: {
+    id: number,
+    description?: string | null,
+    title: string,
+  },
+  commentsIds?: string[] | undefined,
+}
+
+export interface Comment {
+  id?: number,
   body: string,
-  created: string,
+  created?: string,
   prayerId: number,
-  userId: number,
+  userId?: number,
 }
 
 export default instance

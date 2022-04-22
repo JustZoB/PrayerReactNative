@@ -8,6 +8,10 @@ export const setItem = async (name: string, item: string) => {
   }
 }
 
+export const removeItem = async (name: string) => {
+  AsyncStorage.removeItem(name)
+}
+
 export const getTokenAsyncStorage = async () => {
   return await AsyncStorage.getItem('userToken').then(value => {
     if (value !== null) {

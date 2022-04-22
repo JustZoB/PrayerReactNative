@@ -1,30 +1,42 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useState } from 'react'
+import React from 'react'
+import { RouteProp } from '@react-navigation/native';
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { AuthStackParams } from '../navigators/AuthStackNavigator';
-import { TextField } from '../components/TextField';
-import { Button } from '../components/Button';
 import { Field, Form } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerStart } from '../store/userLogin/action';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import { signUpValidate } from '../utils/validate';
+import colors from '../utils/colors'
+import AppRoutes from '../utils/routes';
 import { RootState } from '../store/store';
 import { clearLogInErrors } from '../store/userLogin/reducers';
-import { singUpValidate } from '../utils/validate';
+import { registerStart } from '../store/userLogin/action';
+import { TextField } from '../components/TextField';
+import { Button } from '../components/Button';
 import { AppLoader } from '../components/AppLoader';
+import { ErrorMessage } from '../components/ErrorMessage';
+import { TextFieldError } from '../components/TextFieldError';
 
-export const SignUp: React.FC = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParams>>();
-  const dispatch = useDispatch()
+type SignUpNavigationProps = {
+  navigation: StackNavigationProp<AuthStackParams, AppRoutes.SignUp>;
+  route: RouteProp<AuthStackParams, AppRoutes.SignUp>;
+}
+
+export const SignUp: React.FC<SignUpNavigationProps> = ({ navigation, route }) => {
+  const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.userLoginSlice);
+  const EMAIL_FIELD = 'email';
+  const NAME_FIELD = 'name';
+  const PASSWORD_FIELD = 'password';
 
   const navigateToSignIn = () => {
-    dispatch(clearLogInErrors({}))
-    navigation.navigate('Login')
+    dispatch(clearLogInErrors())
+    navigation.navigate(AppRoutes.Login)
   }
 
   const onSignUp = (values: { email: string, name: string, password: string }) => {
-    dispatch(clearLogInErrors({}))
+    dispatch(clearLogInErrors())
     dispatch(registerStart({
       email: values.email,
       name: values.name,
@@ -40,11 +52,11 @@ export const SignUp: React.FC = () => {
         </Text>
         <Form
           onSubmit={onSignUp}
-          validate={singUpValidate}
+          validate={signUpValidate}
           render={({ handleSubmit }) => (
             <>
               <Field
-                name='email'
+                name={EMAIL_FIELD}
                 render={({ input, meta }) => (
                   <View style={styles.inputContainer}>
                     <TextField
@@ -52,12 +64,12 @@ export const SignUp: React.FC = () => {
                       value={input.value}
                       onTextChange={input.onChange}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
               <Field
-                name='name'
+                name={NAME_FIELD}
                 render={({ input, meta }) => (
                   <View style={styles.inputContainer}>
                     <TextField
@@ -65,12 +77,12 @@ export const SignUp: React.FC = () => {
                       value={input.value}
                       onTextChange={input.onChange}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
               <Field
-                name='password'
+                name={PASSWORD_FIELD}
                 render={({ input, meta }) => (
                   <View style={styles.inputContainer}>
                     <TextField
@@ -79,7 +91,7 @@ export const SignUp: React.FC = () => {
                       onTextChange={input.onChange}
                       isSecure={true}
                     />
-                    {meta.touched && meta.error && <Text style={styles.textFieldError}>{meta.error}</Text>}
+                    {meta.touched && meta.error && <TextFieldError text={meta.error} />}
                   </View>
                 )}
               />
@@ -91,8 +103,8 @@ export const SignUp: React.FC = () => {
               {auth.error &&
                 <>
                   {auth.error.name === "QueryFailedError"
-                    ? <Text style={styles.errorMessage}>Server error: This e-mail is already taken</Text>
-                    : <Text style={styles.errorMessage}>Server error: {auth.error.message}</Text>
+                    ? <ErrorMessage text={'This e-mail is already taken'} />
+                    : <ErrorMessage text={auth.error.message} />
                   }
                 </>
               }
@@ -148,20 +160,7 @@ const styles = StyleSheet.create({
   },
   link: {
     fontSize: 16,
-    color: '#72A8BC',
+    color: colors.lightBlue,
     paddingLeft: 5,
-  },
-  errorMessage: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: 'red',
-    marginTop: 10,
-  },
-  textFieldError: {
-    position: 'absolute',
-    top: 13,
-    right: 10,
-    fontSize: 16,
-    color: 'red',
   },
 });

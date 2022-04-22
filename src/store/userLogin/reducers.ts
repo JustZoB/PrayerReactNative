@@ -19,23 +19,23 @@ const userSlice = createSlice({
   name: 'userSlice',
   initialState,
   reducers: {
-    logInSuccess: (state, action) => {
-      return action.payload
+    logInSuccess(state, action: PayloadAction<User>) {
+      state.user = action.payload
     },
-    logInFailure: (state, action) => {
-      return action.payload
+    logInFailure(state, action: PayloadAction<Error>) {
+      state.error = action.payload
     },
-    registerSuccess: (state, action) => {
-      return action.payload
+    registerSuccess(state, action: PayloadAction<User>) {
+      state.user = action.payload
     },
-    registerFailure: (state, action) => {
-      return action.payload
+    registerFailure(state, action: PayloadAction<Error>) {
+      state.error = action.payload
     },
-    logOut(state, action) {
+    logOut(state) {
       state.user = undefined
       state.error = undefined
     },
-    clearLogInErrors(state, action) {
+    clearLogInErrors(state) {
       state.error = undefined
     },
     setToken(state, action: PayloadAction<{ token: string, }>) {
